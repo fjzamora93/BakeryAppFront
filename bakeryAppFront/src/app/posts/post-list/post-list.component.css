@@ -1,8 +1,11 @@
 :host {
   display: block;
-  margin-top: 1rem;
+  width: 80%;
+  margin: auto;
+  margin-top: 2rem;
 }
 
 .info-text {
   text-align: center;
 }
+
