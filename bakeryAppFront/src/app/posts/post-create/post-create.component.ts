@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../../material/material.module'; // Ruta al módulo de Material
 import { PostsService } from '../posts.service';
 import { HttpClient } from '@angular/common/http';
+import { Post } from '../post.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-post-create',
@@ -14,18 +16,33 @@ import { HttpClient } from '@angular/common/http';
   imports: [CommonModule, FormsModule, MaterialModule]
 })
 export class PostCreateComponent implements OnInit {
-
-    constructor(private postsService: PostsService) {}
+    posts: Post[] = []; // Define la propiedad posts
+    private apiUrl = 'http://localhost:3000/api/posts';
+    constructor(private http: HttpClient, private postsService: PostsService) {}
 
     ngOnInit() {}
   
-    onAddPost(form: NgForm) {
-      if (form.invalid) {
-        return;
-      }
-      const { title, content } = form.value;
-      // Usa el token CSRF al agregar el post
-      this.postsService.addPost(title, content);
-      form.resetForm();
+    // Método para agregar un nuevo post
+  onAddPost(form: NgForm) {
+    if (form.invalid) {
+      return;
     }
+
+    const { title, content } = form.value;
+
+    // Usa el token CSRF al agregar el post
+    this.postsService.addPost(title, content).subscribe(
+      response => {
+        console.log('Post added successfully:', response);
+        this.postsService.getPosts(); // Opcional: Actualiza la lista de posts después de agregar uno nuevo
+        console.log('Nueva lista de posts:', this.posts);
+        
+        form.resetForm(); // Restablece el formulario
+      },
+      error => {
+        console.error('Error adding post:', error);
+      }
+    );
+  }
+
   }
