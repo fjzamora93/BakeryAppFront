@@ -4,12 +4,13 @@ import { Observable, Subject, of } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { Post } from './post.model';
 import { CsrfService } from '../csrf.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class PostsService {
 
     //TODO CAMBIAR URL DE LA API
-    private apiUrl = 'http://localhost:3000/api/posts';
+    private apiUrl = environment.apiUrl + '/posts';
     private posts: Post[] = [];
     private postsUpdated = new Subject<Post[]>();
 
@@ -18,7 +19,7 @@ export class PostsService {
 
     // Método para obtener posts
     getPosts(): void {
-        this.http.get<{ message: string; posts: Post[] }>('http://localhost:3000/api/posts')
+        this.http.get<{ message: string; posts: Post[] }>(this.apiUrl, { withCredentials: true })
         .pipe(
             tap(postData => {
             this.posts = postData.posts;

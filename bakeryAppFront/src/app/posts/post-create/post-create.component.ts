@@ -7,6 +7,8 @@ import { PostsService } from '../posts.service';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../post.model';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
 
 @Component({
   selector: 'app-post-create',
@@ -17,7 +19,7 @@ import { Observable } from 'rxjs';
 })
 export class PostCreateComponent implements OnInit {
     posts: Post[] = []; // Define la propiedad posts
-    private apiUrl = 'http://localhost:3000/api/posts';
+    private apiUrl = `${environment.apiUrl}/posts`;
     constructor(private http: HttpClient, private postsService: PostsService) {}
 
     ngOnInit() {}
