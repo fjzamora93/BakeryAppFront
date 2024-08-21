@@ -43,7 +43,6 @@ export class PostsService {
         return this.postsUpdated.asObservable();
     }
 
-    
 
 
     // Método para agregar un nuevo post

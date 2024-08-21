@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { Post } from '../post.model';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { environment } from '../../../environments/environment';
   standalone: true,
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css'],
-  imports: [CommonModule, FormsModule, MaterialModule]
+  imports: [CommonModule, FormsModule, MaterialModule, MatDialogModule]
 })
 export class PostCreateComponent implements OnInit {
     @Input() editedPost: Post = {

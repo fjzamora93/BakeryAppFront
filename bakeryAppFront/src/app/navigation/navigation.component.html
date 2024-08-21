@@ -1,24 +1,11 @@
 <nav id="menu-pc">
-
     
-    <button mat-fab aria-label="Añadir" id="add-button" (click)="onAddPost()">
+    <button mat-fab  id="add-button" (click)="openOverlay()">
         <mat-icon>add</mat-icon>
     </button>
 
-    <button mat-fab aria-label="Añadir">
-        <mat-icon>bookmark</mat-icon>
-    </button>
-
-    <button mat-fab aria-label="Añadir">
-        <mat-icon>favorite</mat-icon>
-    </button>
-
-    <button mat-button (click)="redirectToBackend()">
-        <a href="#proyectos"><p>Backend</p></a>
-    </button>
-
-    <button mat-button (click)="navigateToFrontendPage()">
-        <a href="#experiencia"><p>Frontend</p></a>
+    <button mat-fab (click)="redirectToBackend()">
+        <mat-icon>home</mat-icon>
     </button>
 
 </nav>

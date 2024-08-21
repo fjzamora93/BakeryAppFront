@@ -1,10 +1,68 @@
 
 <section>
     @if (postDetails) {
-        probando
-        <h1>{{ postDetails.title }}</h1>
-        <p>{{ postDetails.content }}</p>
-    
+
+        
+
+        <mat-card>
+
+            <div>
+                <button mat-fab>
+                    <mat-icon>favorite</mat-icon>
+                </button>
+
+                <button mat-fab>
+                    <mat-icon>bookmark</mat-icon>
+                </button>
+
+                <button mat-fab (click)="openOverlay()">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+
+            <mat-card-header>
+              <mat-card-title>
+                <h1>{{ postDetails.title }}</h1>
+              </mat-card-title>
+              <mat-card-subtitle> Receta realiza por: {{ postDetails.author }}</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+                <p>{{ postDetails.content }}</p>
+                
+                <img src="{{ postDetails.imgUrl }}" alt="{{ postDetails.title }}" mat-card-image>
+            
+                <h3>Ingredientes</h3>
+                <ul>
+                    @for (item of postDetails.items; track item) {
+                        <li>{{ item }}</li>
+                    }
+                </ul>
+
+                <h3>Preparación</h3>
+                <ol>
+                    @for (item of postDetails.steps; track item) {
+                        <li>{{ item }}</li>
+                    }
+                </ol>
+                
+                <h3>Tiempo</h3>
+                <p>{{ postDetails.date }}</p>
+
+                <h3>Dificultad</h3>
+                <p>{{ postDetails.status }} / 5</p>
+            
+                
+            </mat-card-content>
+            
+            <mat-divider/>
+            
+            <mat-card-footer>
+                <h3>Recetas relacionadas</h3>
+                <p> {{ postDetails.category }}</p>
+            </mat-card-footer>
+          </mat-card>
+        
     }
 </section>
 

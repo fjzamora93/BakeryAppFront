@@ -9,6 +9,8 @@ import { PostDetailsComponent } from './posts/post-details/post-details.componen
 import { Post } from './posts/post.model';
 import { NavigationComponent } from "./navigation/navigation.component";
 import { FooterComponent } from "./footer/footer.component";
+import { PostsService } from './posts/posts.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -21,9 +23,21 @@ import { FooterComponent } from "./footer/footer.component";
 })
 export class AppComponent {
     title = 'bakeryAppFront';
+    private postsSub?: Subscription;
     postSelected?: Post;
     addingPost : boolean = false;
 
+    constructor( public postsService: PostsService){}
+
+    ngOnInit() {
+        this.postsService.getPosts();
+        this.postsSub = this.postsService.getPostUpdateListener()
+            .subscribe((posts: Post[]) => {
+                console.log('Posts fetched:', posts);
+                const randomIndex = Math.floor(Math.random() * posts.length);
+                this.postSelected = posts[randomIndex];
+            });    
+    }
 
     onSelectingPost(post: Post) {
         console.log('Post selected:', post); // Verifica que esto muestre el post en la consola

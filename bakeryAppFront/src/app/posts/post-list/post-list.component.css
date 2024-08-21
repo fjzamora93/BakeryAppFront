@@ -1,12 +1,26 @@
 :host {
-  display: block;
-  width: 80%;
+  float: right;
+  width: 20%;
   margin: auto;
   margin-top: 2rem;
   margin-bottom: 2rem;
+  margin: 20px;
 }
 
 .info-text {
   text-align: center;
 }
 
+@media (max-width: 768px) {
+  :host {
+    float: none;
+    width: 100%;
+    display: block;
+    margin: 0px;
+  }
+
+  section{
+    padding: 10%;
+  }
+
+}

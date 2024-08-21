@@ -1,10 +1,53 @@
-section{
-    margin: auto;
-    max-width: 80%;
+
+button[mat-fab]{
+    display: inline;
 }
 
+:host{
+    margin: auto;
+    display: inline;
+}
+
+h3{
+    font-size: 1.5em;
+    font-family:'Lucida Sans';
+    margin-top: 10px;
+}
+
+img{
+    max-width: 100%;
+    height: auto;
+}
+
+mat-card{
+    padding: 20px 10%;
+}
+section{
+    padding: 20px 15% 20px;
+    max-width: 70%;
+    min-height: 500px;
+    
+}
+mat-divider{
+    margin: 20px 0px;
+}
+mat-card-footer{
+    text-align: center;
+}
+
+
 @media (max-width: 700px) {
+
+
+    :host{
+        display: block;
+    }
     section{
         max-width: 100%;
+        padding: 10px 10px;
+    }
+
+    mat-card{
+        padding: 0px;
     }
 }

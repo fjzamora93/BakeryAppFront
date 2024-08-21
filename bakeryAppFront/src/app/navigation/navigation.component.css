@@ -19,27 +19,9 @@ a p{
     padding-top: 10px;
 }
 
-button[mat-fab] {
-    background-color: #8B5FBF; /* Color malva-violeta */
-    width: 56px; /* Tamaño del botón cuadrado */
-    height: 56px; /* Asegura que el botón sea cuadrado */
-    border-radius: 8px; /* Border radius ligero */
-    display: inline;
- 
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-    margin: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-}
 
-button[mat-fab]:hover {
-    background-color: #513779; /* Color malva-violeta más oscuro */
-}
 
-button[mat-fab] mat-icon {
-    font-size: 24px; /* Tamaño del icono */
-    color: white; /* Color del icono */
-    margin: auto;
-}
+
 
 
 #menu-movil{

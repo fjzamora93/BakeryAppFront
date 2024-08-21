@@ -1,12 +1,14 @@
-mat-form-field,
-textarea {
-  width: 100%;
-}
+
 
 
 :host {
     display: block;
-    width: 80%;
     margin: auto;
     margin-top: 2rem;
+    width: 90%
+  }
+
+
+  mat-form-field, h1, div{
+    display: block;
   }

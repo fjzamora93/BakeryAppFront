@@ -1,13 +1,12 @@
 <app-header></app-header>
-<app-navigation [(addPost)]="addingPost"/>
+<app-navigation/>
+
+<app-post-list (postSelected)="onSelectingPost($event)"></app-post-list>
 
 <app-post-details [postDetails]="postSelected"/>
 
-@if (addingPost) {
-  <app-post-create></app-post-create>
-}
 
 
-<app-post-list (postSelected)="onSelectingPost($event)"></app-post-list>
+
 <app-footer></app-footer>
 

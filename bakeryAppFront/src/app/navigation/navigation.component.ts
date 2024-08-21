@@ -3,27 +3,23 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { Router } from '@angular/router';
+import { PostCreateComponent } from '../posts/post-create/post-create.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [MatButtonModule, MatMenuModule, MatIconModule],
+  imports: [MatButtonModule, MatMenuModule, MatIconModule, PostCreateComponent],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css'
 })
 export class NavigationComponent {
-    @Input() addPost: boolean = false;
-    @Output() addPostChange = new EventEmitter<boolean>();
 
     constructor(
-        private router: Router
+        private router: Router,
+        public dialog: MatDialog
       ) {}
 
-    onAddPost() {
-        const adding = false === this.addPost;
-        this.addPostChange.emit(adding);
-        console.log('Adding post:', adding);
-    }
 
     redirectToBackend() {
         // Redirige a una URL externa (backend)
@@ -34,5 +30,12 @@ export class NavigationComponent {
         // Navega a una ruta interna en el frontend (Angular)
         this.router.navigate(['http://localhost:4200']);
       }
+
+    openOverlay() {
+        this.dialog.open(PostCreateComponent, {
+          width: '600px', // Ajusta el tamaño del overlay según sea necesario
+          backdropClass: 'custom-backdrop', // Para estilos personalizados del fondo
+        });
+    }
 
 }
