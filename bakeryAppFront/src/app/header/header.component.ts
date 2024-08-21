@@ -7,7 +7,9 @@ import { MaterialModule } from '../material/material.module'; // Ruta al módulo
 @Component({
   selector: 'app-header',
   standalone: true,
+  
   templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css'],
     imports: [CommonModule, MaterialModule]
 })
 export class HeaderComponent {}

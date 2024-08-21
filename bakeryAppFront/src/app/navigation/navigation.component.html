@@ -1,0 +1,56 @@
+<nav id="menu-pc">
+
+    
+    <button mat-fab aria-label="Añadir" id="add-button" (click)="onAddPost()">
+        <mat-icon>add</mat-icon>
+    </button>
+
+    <button mat-fab aria-label="Añadir">
+        <mat-icon>bookmark</mat-icon>
+    </button>
+
+    <button mat-fab aria-label="Añadir">
+        <mat-icon>favorite</mat-icon>
+    </button>
+
+    <button mat-button (click)="redirectToBackend()">
+        <a href="#proyectos"><p>Backend</p></a>
+    </button>
+
+    <button mat-button (click)="navigateToFrontendPage()">
+        <a href="#experiencia"><p>Frontend</p></a>
+    </button>
+
+</nav>
+
+
+<nav id="menu-movil">
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button-movil">
+        <i class="material-icons" >menu</i>
+    </button>
+
+    <mat-menu #menu="matMenu" id="menu-desplegable-movil">
+        <button mat-fab aria-label="Añadir">
+            <mat-icon>add</mat-icon>
+        </button>
+    
+        <button mat-fab aria-label="Añadir">
+            <mat-icon>bookmark</mat-icon>
+        </button>
+    
+        <button mat-fab aria-label="Añadir">
+            <mat-icon>favorite</mat-icon>
+        </button>
+    
+        <button mat-button>
+            <a href="#proyectos"><p>Backend</p></a>
+        </button>
+    
+        <button mat-button>
+            <a href="#experiencia"><p>Frontend</p></a>
+        </button>
+    </mat-menu>
+
+</nav>
+

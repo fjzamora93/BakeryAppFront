@@ -1,14 +1,31 @@
 <mat-accordion multi="true" *ngIf="posts.length; else noPosts">
-    <mat-expansion-panel *ngFor="let post of posts">
-      <mat-expansion-panel-header>
-        {{ post.title }}
-      </mat-expansion-panel-header>
-      <p>{{ post.content }}</p>
-      <mat-action-row>
-        <button mat-button color="primary">EDIT</button>
-        <button mat-button color="warn">DELETE</button>
-      </mat-action-row>
-    </mat-expansion-panel>
+
+
+
+    @for (post of posts; track post._id) {
+        @if (!editing) {
+            <mat-expansion-panel>
+
+                
+                <mat-expansion-panel-header (click)="onSelectingPost(post)">
+                    {{ post.title }}
+                </mat-expansion-panel-header>
+
+                <p> Id del post: {{ post._id }}</p>
+                <p> Contenido: {{ post.description }}</p>
+            
+                <mat-action-row>
+                    <button mat-button color="primary" (click)="onUpdate(post)">EDIT</button>  
+                    <button mat-button color="warn" (click)="onDelete(post._id)">DELETE</button>
+                </mat-action-row>
+
+            </mat-expansion-panel>
+        } 
+    }
+
+    @if (editing) {
+        <app-post-create [(editedPost)]="myPost" [(editing)]="this.editing" ></app-post-create>
+    }
   </mat-accordion>
   
   <ng-template #noPosts>
