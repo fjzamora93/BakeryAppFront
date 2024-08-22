@@ -25,10 +25,8 @@ export class PostsService {
         this.http.get<{ message: string; posts: Post[] }>(this.apiUrl, { withCredentials: true })
             .pipe(
                 tap(postData => {
-        
                     this.posts = postData.posts;
                     this.postsUpdated.next([...this.posts]);
-                    console.log('Posts fetched:', this.posts);
                 }),
                 catchError(error => {
                     console.error('Error fetching posts:', error);

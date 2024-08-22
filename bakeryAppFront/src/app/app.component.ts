@@ -23,15 +23,14 @@ import { Subscription } from 'rxjs';
 })
 export class AppComponent {
     title = 'bakeryAppFront';
-    private postsSub?: Subscription;
+   
     postSelected?: Post;
-    addingPost : boolean = false;
+    isEditing : boolean = false;
 
     constructor( public postsService: PostsService){}
 
     ngOnInit() {
-        this.postsService.getPosts();
-        this.postsSub = this.postsService.getPostUpdateListener()
+        this.postsService.getPostUpdateListener()
             .subscribe((posts: Post[]) => {
                 console.log('Posts fetched:', posts);
                 const randomIndex = Math.floor(Math.random() * posts.length);

@@ -9,7 +9,7 @@
             <form  #postForm="ngForm" >
                 <input type="text" 
                 name="_id" 
-                [(ngModel)]="editedPost._id" 
+                [(ngModel)]="myPost._id" 
                 hidden 
                 #_id="ngModel" > 
 
@@ -18,7 +18,7 @@
                         matInput
                         type="text"
                         name="title"
-                        [(ngModel)]="editedPost.title"
+                        [(ngModel)]="myPost.title"
                         required
                         placeholder="Post Title"
                         #title="ngModel">
@@ -28,7 +28,7 @@
             <mat-form-field>
                 <textarea
                 matInput rows="4" name="description"
-                [(ngModel)]="editedPost.description"
+                [(ngModel)]="myPost.description"
                 required placeholder="Post Content"
                 #description="ngModel">
                 </textarea>
@@ -46,6 +46,12 @@
                     mat-raised-button
                     color="primary"
                     (click)="onUpdatePost(postForm)">Actualizar
+                </button>
+
+                <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="onDeletePost(myPost._id)">Eliminar
                 </button>
             }
             <button mat-raised-button

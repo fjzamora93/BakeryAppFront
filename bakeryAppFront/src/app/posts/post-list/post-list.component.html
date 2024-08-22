@@ -1,33 +1,47 @@
 
+
+
 <section>
-    <mat-accordion multi="true" *ngIf="posts.length; else noPosts">
 
+    <div class="custom-paginator">
+        <button mat-icon-button (click)="onPaginateChangePrevious()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
 
+        <!-- <span class="paginator-info">Page {{currentPage}} of {{totalPages}}</span> -->
 
-        @for (post of posts; track post._id) {
-            @if (!editing) {
+        <button mat-icon-button (click)="onPaginateChangeFollowing()">
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    </div>
+
+    <mat-accordion multi="false" *ngIf="posts.length; else noPosts">
+
+        @for (post of slicedPosts ; track post._id;) {
+           
                 <mat-expansion-panel>
-
-                    
                     <mat-expansion-panel-header (click)="onSelectingPost(post)">
-                        {{ post.title }}
+                       
+                            <img src="{{ post.imgUrl }}">
+                            <p>{{ post.title }}</p>
+                        
                     </mat-expansion-panel-header>
 
-                    <p> Id del post: {{ post._id }}</p>
-                    <p> Contenido: {{ post.description }}</p>
-                
-                    <mat-action-row>
-                        <button mat-button color="primary" (click)="onUpdate(post)">EDIT</button>  
-                        <button mat-button color="warn" (click)="onDelete(post._id)">DELETE</button>
-                    </mat-action-row>
+                    <div class="mobile-view">
+                        <a href="#{{ post._id }}" class="view-more">
+                            <button mat-fab aria-label="Receta Completa">
+                                <mat-icon>expand_more </mat-icon>
+                            </button>
+                        </a>
+                        <p> {{ post.content }}</p>
+                    </div>
 
+                    <div class="desktop-view">
+                        <p> {{ post.description }}</p>
+                    </div>
                 </mat-expansion-panel>
             } 
-        }
-
-        @if (editing) {
-            <app-post-create [(editedPost)]="myPost" [(editing)]="this.editing" ></app-post-create>
-        }
+        
     </mat-accordion>
     
     <ng-template #noPosts>

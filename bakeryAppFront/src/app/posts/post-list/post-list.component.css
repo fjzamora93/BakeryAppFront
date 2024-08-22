@@ -7,8 +7,33 @@
   margin: 20px;
 }
 
+p {
+    margin: auto 5px;
+}
+
+mat-expansion-panel-header{
+    padding: 10px;
+}
+img{
+    width: 20%;
+    height: auto;
+    border-radius: 10%;
+    max-height: 40px;
+    object-fit:cover;
+    overflow:hidden;
+}
+
 .info-text {
   text-align: center;
+}
+
+.view-more{
+    float: left;
+}
+
+.view-more button{
+    padding: 0px;
+    margin: 0px 10px 5px 0px;
 }
 
 @media (max-width: 768px) {

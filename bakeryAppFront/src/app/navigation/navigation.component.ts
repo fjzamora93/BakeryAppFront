@@ -31,10 +31,13 @@ export class NavigationComponent {
         this.router.navigate(['http://localhost:4200']);
       }
 
-    openOverlay() {
+      addPostOverlay() {
         this.dialog.open(PostCreateComponent, {
-          width: '600px', // Ajusta el tamaño del overlay según sea necesario
-          backdropClass: 'custom-backdrop', // Para estilos personalizados del fondo
+            width: '600px', 
+            backdropClass: 'custom-backdrop', 
+            data: {
+                editing: false,
+            }
         });
     }
 

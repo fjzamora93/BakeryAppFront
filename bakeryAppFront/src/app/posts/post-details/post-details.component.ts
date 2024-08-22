@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { PostsService } from '../posts.service';
 import { Post } from '../post.model';
 import { Router } from '@angular/router';
@@ -18,7 +18,8 @@ import { MatDivider } from '@angular/material/divider';
 })
 export class PostDetailsComponent implements OnInit  {
     @Input() postDetails?: Post ;
-
+    @Input() isEditing: boolean = false;
+    @Output() isEditingChange = new EventEmitter<boolean>();
   
     constructor(public dialog: MatDialog){}
   
@@ -30,6 +31,10 @@ export class PostDetailsComponent implements OnInit  {
         this.dialog.open(PostCreateComponent, {
           width: '600px', // Ajusta el tamaño del overlay según sea necesario
           backdropClass: 'custom-backdrop', // Para estilos personalizados del fondo
+          data: {
+            editing: true, // Aquí defines que editing es true
+            post: this.postDetails 
+          },
         });
     }
 

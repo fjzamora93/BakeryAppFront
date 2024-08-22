@@ -30,4 +30,18 @@ button[mat-fab] mat-icon {
 }
 
 
+.mobile-view{
+    display:none
+}
 
+
+@media (max-width: 768px) {
+    .mobile-view{
+        display:block;
+        padding: 10px;
+    }
+
+    .desktop-view{
+        display:none
+    }
+}
