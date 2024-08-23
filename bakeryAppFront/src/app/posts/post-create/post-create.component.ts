@@ -6,7 +6,7 @@ import { MaterialModule } from '../../material/material.module'; // Ruta al mód
 import { PostsService } from '../posts.service';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../post.model';
-import { Observable, catchError, of, tap } from 'rxjs';
+import { Observable, catchError, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormlistComponent } from '../../shared/formlist/formlist.component';
@@ -25,9 +25,7 @@ export class PostCreateComponent {
     editing: boolean;
     posts: Post[] = []; // Define la propiedad posts
     myPost: Post;
-
-
-    
+    file: File | string = "";
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any, 
@@ -91,31 +89,54 @@ export class PostCreateComponent {
         this.dialogRef.close();
     }
 
-    // Método para actualizar un post
     onUpdatePost(form: NgForm) {
         if (form.invalid) return;
-
+    
         this.myPost._id = form.value._id;
         this.myPost.title = form.value.title;
         this.myPost.description = form.value.description;
         this.myPost.content = form.value.content;
-        console.log('Post to update:', this.myPost.items, this.myPost.content);
-
-        this.postsService.updatePost(this.myPost).pipe(
-            tap(response => {
-                console.log('Post updated successfully:', response);
-                this.postsService.getPosts();
-            }),
-            catchError(error => {
-                
-                console.error('Error updating post', error);
-                return of(null);
-            })
-        ).subscribe();
+    
+        if (this.myPost.imgUrl instanceof File) {
+            console.log("EL PUTO FILE ANTES DE QUE PASE POR IMGUR: ", this.myPost.imgUrl);
+            this.postsService.uploadToImgur(this.myPost.imgUrl).pipe(
+                switchMap(imgurLink => {
+                    if (imgurLink) {
+                        this.myPost.imgUrl = imgurLink; // Asigna el enlace de Imgur al post
+                        console.log("EL PUTO LINK: ", imgurLink);
+                    } else {
+                        this.myPost.imgUrl = ''; // En caso de error, asigna una cadena vacía
+                    }
+                    return this.postsService.updatePost(this.myPost); // Actualiza el post con el nuevo enlace
+                }),
+                tap(response => {
+                    console.log('Post updated successfully:', response);
+                    this.postsService.getPosts();
+                }),
+                catchError(error => {
+                    console.error('Error updating post', error);
+                    return of(null);
+                })
+            ).subscribe();
+        } else {
+            // Si imgUrl no es un archivo, actualiza el post directamente
+            this.postsService.updatePost(this.myPost).pipe(
+                tap(response => {
+                    console.log('Post updated successfully:', response);
+                    this.postsService.getPosts();
+                }),
+                catchError(error => {
+                    console.error('Error updating post', error);
+                    return of(null);
+                })
+            ).subscribe();
+        }
+    
         this.dialogRef.close();
     }
-
-
+    
+    
+    
 
     // Usa el token CSRF al agregar el post
     uploadPost(post: Post, form: NgForm) {

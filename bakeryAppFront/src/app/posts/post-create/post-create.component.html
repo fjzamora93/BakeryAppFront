@@ -21,7 +21,7 @@
                 </mat-form-field>
 
                 <mat-form-field>
-                    <textarea matInput  required rows="2" 
+                    <textarea matInput required required rows="2" 
                         name="description" [(ngModel)]="myPost.description" #description="ngModel"
                         placeholder="Incluye un resumen breve de la receta (1 o dos líneas)">
                     </textarea>
@@ -62,15 +62,15 @@
                 </mat-form-field>
 
                
-                    <input
+                <input
                       type="file"
                       required
                       name="imgUrl"
                       (change)="onFileSelected($event)"
                       accept="image/jpeg, image/jpg, image/png"
                       placeholder="Selecciona una imagen"
-                    />
-                    <mat-error *ngIf="myPost.imgUrl">Selecciona una imagen válida (JPEG, JPG, PNG)</mat-error>
+                />
+                <mat-error *ngIf="myPost.imgUrl">Selecciona una imagen válida (JPEG, JPG, PNG)</mat-error>
                
 
             @if (!editing){

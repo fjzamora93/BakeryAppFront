@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Routes } from '@angular/router';
 import { PostCreateComponent } from "./posts/post-create/post-create.component";
 import { HeaderComponent } from "./header/header.component";
 import { PostListComponent } from "./posts/post-list/post-list.component";
@@ -11,6 +11,14 @@ import { NavigationComponent } from "./navigation/navigation.component";
 import { FooterComponent } from "./footer/footer.component";
 import { PostsService } from './posts/posts.service';
 import { Subscription } from 'rxjs';
+import { LoginComponent } from './auth/login/login.component';
+import { AuthGuard } from './auth/auth.guard';
+
+const routes: Routes = [
+    { path: 'login', component: LoginComponent },
+    { path: 'create', component: PostCreateComponent, canActivate: [AuthGuard] },
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
+  ];
 
 @Component({
   selector: 'app-root',
