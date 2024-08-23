@@ -8,7 +8,7 @@ export interface Post {
     steps?: string[];
     tags?: string[];
     url?: string;
-    imgUrl?: string;
+    imgUrl?: File | string;
     attachedFile?: string;
     category?: string;
     date?: string;

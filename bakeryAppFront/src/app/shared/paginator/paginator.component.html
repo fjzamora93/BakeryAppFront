@@ -1,0 +1,11 @@
+<div class="custom-paginator">
+    <button mat-icon-button (click)="onPaginateChangePrevious()">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <span class="paginator-info">Página {{currentPage}} de {{totalPages}}</span>
+
+    <button mat-icon-button (click)="onPaginateChangeFollowing()">
+        <mat-icon>arrow_forward</mat-icon>
+    </button>
+</div>

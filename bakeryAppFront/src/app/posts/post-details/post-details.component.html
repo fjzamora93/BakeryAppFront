@@ -6,25 +6,23 @@
 
         <mat-card id="{{ postDetails._id }}">
 
-            <div>
-                <button mat-fab>
+            <div style="display:inline">
+                <button mat-fab (click)="showMessage()" class="button-like">
                     <mat-icon>favorite</mat-icon>
-                </button>
-
-                <button mat-fab>
-                    <mat-icon>bookmark</mat-icon>
-                </button>
-
-                <button mat-fab (click)="openOverlay()">
-                    <mat-icon>edit</mat-icon>
                 </button>
             </div>
 
             <mat-card-header>
-              <mat-card-title>
-                <h1>{{ postDetails.title }}</h1>
-              </mat-card-title>
-              <mat-card-subtitle> Receta realiza por: {{ postDetails.author }}</mat-card-subtitle>
+            
+                <button mat-fab (click)="openOverlay()" class="button-edit">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            
+
+                <mat-card-title >
+                    <h1>{{ postDetails.title }}</h1>
+                </mat-card-title>
+                <mat-card-subtitle> Receta realiza por: {{ postDetails.author }}</mat-card-subtitle>
             </mat-card-header>
             
             <mat-card-content>

@@ -14,26 +14,64 @@
                 #_id="ngModel" > 
 
                 <mat-form-field>
-                    <input
-                        matInput
-                        type="text"
-                        name="title"
-                        [(ngModel)]="myPost.title"
-                        required
-                        placeholder="Post Title"
-                        #title="ngModel">
-                    <mat-error *ngIf="title.invalid">Please enter a post title.</mat-error>
+                    <input matInput type="text" required
+                        name="title" [(ngModel)]="myPost.title" #title="ngModel"
+                        placeholder="Título de la receta">
+                    <mat-error *ngIf="title.invalid">Introduce un título.</mat-error>
                 </mat-form-field>
 
-            <mat-form-field>
-                <textarea
-                matInput rows="4" name="description"
-                [(ngModel)]="myPost.description"
-                required placeholder="Post Content"
-                #description="ngModel">
-                </textarea>
-                <mat-error *ngIf="description.invalid">Please enter a post title.</mat-error>
-            </mat-form-field>
+                <mat-form-field>
+                    <textarea matInput  required rows="2" 
+                        name="description" [(ngModel)]="myPost.description" #description="ngModel"
+                        placeholder="Incluye un resumen breve de la receta (1 o dos líneas)">
+                    </textarea>
+                    <mat-error *ngIf="description.invalid">¡No te olvides de escribir algo!</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <textarea matInput  required rows="4" 
+                        name="content" [(ngModel)]="myPost.content" #content="ngModel"
+                        placeholder="Explica en más detalles en qué consiste la receta: origen, ocasiones en las que te gusta hacerla, por qué te gusta...">
+                    </textarea>
+                    <mat-error *ngIf="content.invalid">¡No te olvides de escribir algo!</mat-error>
+                </mat-form-field>
+
+                
+                <app-formlist [(items)]="myPost.items!"/>
+                <app-formlist [(items)]="myPost.steps!"/>
+
+                <mat-form-field>
+                    <input matInput type="text" required
+                        name="date" [(ngModel)]="myPost.date" #date="ngModel"
+                        placeholder="¿Cuánto tiempo se tarda?">
+                    <mat-error *ngIf="date.invalid">Introduce el tiempo estimado</mat-error>
+                </mat-form-field>
+                
+                <mat-form-field>
+                    <input matInput type="text" required
+                        name="category" [(ngModel)]="myPost.category" #category="ngModel"
+                        placeholder="Introduce la categoría">
+                    <mat-error *ngIf="category.invalid">Introduce la categoría</mat-error>
+                </mat-form-field>
+                
+                <mat-form-field>
+                    <input matInput type="text" required
+                        name="status" [(ngModel)]="myPost.status" #status="ngModel"
+                        placeholder="¿Cómo de difícil es la receta?">
+                    <mat-error *ngIf="status.invalid">Introduce la dificultad</mat-error>
+                </mat-form-field>
+
+               
+                    <input
+                      type="file"
+                      required
+                      name="imgUrl"
+                      (change)="onFileSelected($event)"
+                      accept="image/jpeg, image/jpg, image/png"
+                      placeholder="Selecciona una imagen"
+                    />
+                    <mat-error *ngIf="myPost.imgUrl">Selecciona una imagen válida (JPEG, JPG, PNG)</mat-error>
+               
 
             @if (!editing){
                 <button
@@ -51,7 +89,8 @@
                 <button
                     mat-raised-button
                     color="primary"
-                    (click)="onDeletePost(myPost._id)">Eliminar
+                    (click)="onDeletePost(myPost._id)">
+                    <i class="material-icons">delete</i>
                 </button>
             }
             <button mat-raised-button

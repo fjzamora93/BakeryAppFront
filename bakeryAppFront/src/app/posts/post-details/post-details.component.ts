@@ -8,11 +8,13 @@ import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { PostCreateComponent } from '../post-create/post-create.component';
 import { MatDivider } from '@angular/material/divider';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-post-details',
   standalone: true,
-  imports: [MatCardModule, MatCard, MatIcon, PostCreateComponent, MatDivider],
+  imports: [MatCardModule, MatCard, MatIcon, PostCreateComponent, MatDivider, MatSnackBarModule],
   templateUrl: './post-details.component.html',
   styleUrl: './post-details.component.css'
 })
@@ -21,7 +23,7 @@ export class PostDetailsComponent implements OnInit  {
     @Input() isEditing: boolean = false;
     @Output() isEditingChange = new EventEmitter<boolean>();
   
-    constructor(public dialog: MatDialog){}
+    constructor(public dialog: MatDialog, private snackBar: MatSnackBar){}
   
     ngOnInit(): void {
         console.log('Inicailizando');
@@ -29,13 +31,27 @@ export class PostDetailsComponent implements OnInit  {
 
     openOverlay() {
         this.dialog.open(PostCreateComponent, {
-          width: '600px', // Ajusta el tamaño del overlay según sea necesario
-          backdropClass: 'custom-backdrop', // Para estilos personalizados del fondo
-          data: {
-            editing: true, // Aquí defines que editing es true
-            post: this.postDetails 
+            width: '80vw', // Ajusta el tamaño del overlay según sea necesario
+            height: '90vh', // Ajusta el tamaño del overlay según sea necesario
+            backdropClass: 'custom-backdrop', // Para estilos personalizados del fondo
+            panelClass: 'custom-panel-class',
+            data: {
+                editing: true, // Aquí defines que editing es true
+                post: this.postDetails 
           },
         });
     }
+
+    showMessage() {
+        this.snackBar.open('¡Añadido a favoritos!', 'Ok', {
+          duration: 3000, 
+          verticalPosition: 'top', // 'top' o 'bottom'
+          horizontalPosition: 'center', // 'start', 'center', 'end', 'left', 'right',
+          panelClass: ['custom-snackbar'], // Clases personalizadas
+        });
+        
+      }
+
+     
 
 }

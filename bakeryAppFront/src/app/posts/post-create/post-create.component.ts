@@ -9,6 +9,7 @@ import { Post } from '../post.model';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { FormlistComponent } from '../../shared/formlist/formlist.component';
 
 
 @Component({
@@ -16,36 +17,17 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
   standalone: true,
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css'],
-  imports: [CommonModule, FormsModule, MaterialModule, MatDialogModule]
+  imports: [CommonModule, FormsModule, MaterialModule, MatDialogModule, FormlistComponent]
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent {
     
     @Output() editedPostChange = new EventEmitter<Post>();
     editing: boolean;
     posts: Post[] = []; // Define la propiedad posts
-    myPost: Post = {
-        _id: '',
-        title: '',
-        subtitle: '',
-        description: '',
-        content: '',
-        items: [],
-        steps: [],
-        tags: [],
-        url: '',
-        imgUrl: '',
-        attachedFile: '',
-        category: '',
-        date: '',
-        price: 0,
-        status: 'draft',
-        views: 0,
-        likes: 0,
-        comments: [],
-        author: ''
-    };
+    myPost: Post;
+
+
     
-    private apiUrl = `${environment.apiUrl}/posts`;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any, 
@@ -55,13 +37,33 @@ export class PostCreateComponent implements OnInit {
 
             if (this.editing){
                 this.myPost = data.post;
+            } else {
+                this.myPost = {
+                    _id: '',
+                    title: '',
+                    subtitle: '',
+                    description: '',
+                    content: '',
+                    items: [],
+                    steps: [],
+                    tags: [],
+                    url: '',
+                    imgUrl: '',
+                    attachedFile: '',
+                    category: '',
+                    date: '',
+                    price: 0,
+                    status: 'draft',
+                    views: 0,
+                    likes: 0,
+                    comments: [],
             }
             
             console.log('Editing:', this.editing);
             console.log('Post:', this.myPost);
-      }
+      }}
 
-    ngOnInit() {}
+
   
     // Método para agregar un nuevo post
     onAddPost(form: NgForm) {
@@ -96,6 +98,8 @@ export class PostCreateComponent implements OnInit {
         this.myPost._id = form.value._id;
         this.myPost.title = form.value.title;
         this.myPost.description = form.value.description;
+        this.myPost.content = form.value.content;
+        console.log('Post to update:', this.myPost.items, this.myPost.content);
 
         this.postsService.updatePost(this.myPost).pipe(
             tap(response => {
@@ -132,4 +136,23 @@ export class PostCreateComponent implements OnInit {
     onCancelEdit() {
         this.dialogRef.close();
     }
+
+    onFileSelected(event: Event): void {
+        const input = event.target as HTMLInputElement;
+    
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
+    
+          // Verificar el tipo de archivo
+          if (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png') {
+            this.myPost.imgUrl! = file;
+            console.log('Archivo seleccionado:',  this.myPost.imgUrl);
+          } else {
+            // Mostrar un mensaje de error o manejar la excepción de tipo de archivo
+            console.error('Tipo de archivo no válido. Solo se permiten JPEG, JPG, y PNG.');
+          }
+        }
+      }
+
+    
   }

@@ -1,0 +1,25 @@
+.custom-paginator {
+    display: flex;
+    align-items: center; /* Alinea verticalmente los elementos */
+    justify-content: center;
+    gap: 20px; /* Añade margen entre los elementos */
+}
+
+.custom-paginator button {
+    background-color: #6A0DAD; /* Fondo de color morado */
+    color: white; /* Color del icono en blanco */
+    border: none;
+    border-radius: 5px; /* Bordes ligeramente redondeados */
+    padding: 8px; /* Espaciado interno */
+    cursor: pointer;
+}
+
+.custom-paginator .paginator-info {
+    font-size: 16px;
+    color: #333; /* Color del texto de la página */
+    margin: 0 10px; /* Margen entre el texto y los botones */
+}
+
+.custom-paginator button:hover {
+    background-color: #8A2BE2; /* Un tono morado más claro al pasar el mouse */
+}

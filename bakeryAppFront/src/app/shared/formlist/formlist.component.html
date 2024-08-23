@@ -1,0 +1,15 @@
+<form>
+    <mat-form-field style="display: inline; width: 70%">
+        <button mat-raised-button type="button" color="primary" (click)="addItem()" id="button-add"> 
+            <i class="material-icons">add_circle</i>
+        </button>
+        <input id="item-list" matInput placeholder="¡Añade un objeto a la lista!" [(ngModel)]="newItem" name="newItem" (keyup.enter)="addItem()">
+    </mat-form-field>
+    
+    <ul>
+        @for (item of items; track item){
+            <li>{{item}}</li>
+        }
+    </ul>
+</form>
+

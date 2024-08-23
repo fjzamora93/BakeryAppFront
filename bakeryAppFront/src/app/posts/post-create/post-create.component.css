@@ -1,11 +1,23 @@
 
+button{
+    margin-right: 10px;
+}
 
+#button-add{
+    float: right;
+}
+
+#item-list{
+    display: inline;
+    max-width: 80%;
+
+}
 
 :host {
     display: block;
     margin: auto;
     margin-top: 2rem;
-    width: 90%
+    width: 90%;
   }
 
 

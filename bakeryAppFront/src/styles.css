@@ -4,9 +4,24 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .custom-backdrop {
     background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro con opacidad */
+    padding:0px;
   }
 
-  
+.custom-panel-class{
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 0px; /* Espaciado interno */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  }
+
+
+
+.custom-snackbar {
+    transform: translateY(30vh) !important;
+    
+  }
+
+
+
 button[mat-fab] {
     background-color: #8B5FBF; /* Color malva-violeta */
     width: 56px; /* Tamaño del botón cuadrado */

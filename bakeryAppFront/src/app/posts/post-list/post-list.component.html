@@ -3,18 +3,9 @@
 
 <section>
 
-    <div class="custom-paginator">
-        <button mat-icon-button (click)="onPaginateChangePrevious()">
-            <mat-icon>arrow_back</mat-icon>
-        </button>
+    <app-paginator  [posts]="posts" [(slicedPosts)] = "slicedPosts"/>
 
-        <!-- <span class="paginator-info">Page {{currentPage}} of {{totalPages}}</span> -->
-
-        <button mat-icon-button (click)="onPaginateChangeFollowing()">
-            <mat-icon>arrow_forward</mat-icon>
-        </button>
-    </div>
-
+    
     <mat-accordion multi="false" *ngIf="posts.length; else noPosts">
 
         @for (post of slicedPosts ; track post._id;) {
@@ -30,7 +21,7 @@
                     <div class="mobile-view">
                         <a href="#{{ post._id }}" class="view-more">
                             <button mat-fab aria-label="Receta Completa">
-                                <mat-icon>expand_more </mat-icon>
+                                <mat-icon>more </mat-icon>
                             </button>
                         </a>
                         <p> {{ post.content }}</p>
