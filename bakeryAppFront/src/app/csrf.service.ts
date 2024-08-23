@@ -30,7 +30,6 @@ export class CsrfService {
   getHeaders(): Observable<HttpHeaders> {
     return this.getCsrfToken().pipe(
       map(token => new HttpHeaders({
-        'Content-Type': 'application/json',
         'X-CSRF-Token': token
       }))
     );

@@ -89,6 +89,8 @@ export class PostCreateComponent {
         this.dialogRef.close();
     }
 
+
+
     onUpdatePost(form: NgForm) {
         if (form.invalid) return;
     
@@ -99,42 +101,23 @@ export class PostCreateComponent {
     
         if (this.myPost.imgUrl instanceof File) {
             console.log("EL PUTO FILE ANTES DE QUE PASE POR IMGUR: ", this.myPost.imgUrl);
-            this.postsService.uploadToImgur(this.myPost.imgUrl).pipe(
-                switchMap(imgurLink => {
-                    if (imgurLink) {
-                        this.myPost.imgUrl = imgurLink; // Asigna el enlace de Imgur al post
-                        console.log("EL PUTO LINK: ", imgurLink);
-                    } else {
-                        this.myPost.imgUrl = ''; // En caso de error, asigna una cadena vacía
-                    }
-                    return this.postsService.updatePost(this.myPost); // Actualiza el post con el nuevo enlace
-                }),
-                tap(response => {
-                    console.log('Post updated successfully:', response);
-                    this.postsService.getPosts();
-                }),
-                catchError(error => {
-                    console.error('Error updating post', error);
-                    return of(null);
-                })
-            ).subscribe();
-        } else {
-            // Si imgUrl no es un archivo, actualiza el post directamente
-            this.postsService.updatePost(this.myPost).pipe(
-                tap(response => {
-                    console.log('Post updated successfully:', response);
-                    this.postsService.getPosts();
-                }),
-                catchError(error => {
-                    console.error('Error updating post', error);
-                    return of(null);
-                })
-            ).subscribe();
         }
+    
+        this.postsService.updatePostFormData(this.myPost).pipe(
+            tap(response => {
+                console.log('Post updated successfully:', response);
+                this.postsService.getPosts();
+            }),
+            catchError(error => {
+                console.error('Error updating post', error);
+                return of(null);
+            })
+        ).subscribe();
     
         this.dialogRef.close();
     }
     
+
     
     
 
@@ -174,6 +157,4 @@ export class PostCreateComponent {
           }
         }
       }
-
-    
-  }
+    }

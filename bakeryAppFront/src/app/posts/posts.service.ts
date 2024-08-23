@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, from, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, from, of, map } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { Post } from './post.model';
 import { CsrfService } from '../csrf.service';
@@ -102,61 +102,72 @@ export class PostsService {
         const formData: FormData = new FormData();
         formData.append('image', file);
     
-        return from(fetch('https://api.imgur.com/3/image', {
-            method: 'POST',
-            headers: {
-                Authorization: 'Client-ID 5365eaee691c9f3', 
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log("DATA: ", data.data.link);
-                return data.data.link; 
-            } else {
-                throw new Error(data.data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error uploading image:', error);
-            return of(''); // Devuelve una cadena vacía en caso de error
-        }));
+        return new Observable<string>(observer => {
+            fetch('https://api.imgur.com/3/image', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Client-ID 5365eaee691c9f3',
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("DATA: ", data.data.link);
+                    observer.next(data.data.link);  // Emitir el enlace de la imagen
+                    observer.complete();  // Completar el Observable
+                } else {
+                    observer.error(new Error(data.data.error));  // Emitir un error si la respuesta no es exitosa
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading image:', error);
+                observer.error(error);  // Emitir un error si hay problemas con fetch
+            });
+        });
     }
     
+    
 
-    // updatePost(post: Post): Observable<any> {
-    //     const postId = post._id;
-    //     const formData: FormData = new FormData();
+
+
+
+    updatePostFormData(post: Post): Observable<any> {
+        const postId = post._id; // Asegúrate de que 'post._id' esté definido y no sea nulo
+        const formData: FormData = new FormData();
     
-    //     // Agrega los campos del post a FormData
-    //     // Agregar solo si existen
-    //     formData.append('title', post.title);
-    //     formData.append('description', post.description || '');
-    //     formData.append('content', post.content);
-    //     if (post.items) formData.append('items', JSON.stringify(post.items)); 
-    //     if (post.steps) formData.append('steps', JSON.stringify(post.steps));
-    //     if (post.category) formData.append('category', post.category);
-    //     if (post.status) formData.append('status', post.status);
-    //     if (post.date) formData.append('date', post.date);
+        // Agrega los campos del post a FormData
+        formData.append('title', post.title);
+        formData.append('description', post.description || '');
+        formData.append('content', post.content);
+        if (post.items) formData.append('items', JSON.stringify(post.items));
+        if (post.steps) formData.append('steps', JSON.stringify(post.steps));
+        if (post.category) formData.append('category', post.category);
+        if (post.status) formData.append('status', post.status);
+        if (post.date) formData.append('date', post.date);
     
-    //     // Agrega la imagen a FormData
-    //     // if (post.imgUrl instanceof File) {
-    //     //     formData.append('imgUrl', post.imgUrl);  // 'imgUrl' es el nombre que espera el backend
-    //     // }
+        // Agrega la imagen si es un archivo
+        if (post.imgUrl instanceof File) {
+            formData.append('image', post.imgUrl); //! 'image' es el nombre que espera el backend el MULTER!!!
+        }
     
-    //     return this.csrfService.getHeaders().pipe(
-    //         switchMap(headers => {
-    //             console.log('Intentando actualizar en el front:', post);
-    //             return this.http.put(this.apiUrl + '/' + postId, formData, { headers, withCredentials: true }).pipe(
-    //                 catchError(error => {
-    //                     console.error('Error updating post:', error);
-    //                     return of(error);
-    //                 })
-    //             );
-    //         })
-    //     );
-    // }
+        return this.csrfService.getHeaders().pipe(
+            switchMap(headers => {
+                // No se puede usar 'Content-Type': 'multipart/form-data' porque el navegador lo establece automáticamente
+                const updatedHeaders = headers.delete('Content-Type');
+                return this.http.put(`${this.apiUrl}/${postId}`, formData, {
+                    headers: updatedHeaders,
+                    withCredentials: true
+                }).pipe(
+                    catchError(error => {
+                        console.error('Error updating post:', error);
+                        return of(error);
+                    })
+                );
+            })
+        );
+    }
+    
     
 
 

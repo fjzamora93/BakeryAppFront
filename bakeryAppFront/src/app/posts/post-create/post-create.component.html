@@ -62,16 +62,24 @@
                 </mat-form-field>
 
                
+                <!-- <mat-form-field>
+                    <input matInput type="text" required
+                        name="imgUrl" [(ngModel)]="myPost.imgUrl" #imgUrl="ngModel"
+                        placeholder="Url de la imagen (pegar enlace)">
+                    <mat-error *ngIf="title.invalid">Introduce el link de la imagen.</mat-error>
+                </mat-form-field> -->
+
                 <input
-                      type="file"
-                      required
-                      name="imgUrl"
-                      (change)="onFileSelected($event)"
-                      accept="image/jpeg, image/jpg, image/png"
-                      placeholder="Selecciona una imagen"
+                    type="file"
+                    required
+                    name="image"
+                    (change)="onFileSelected($event)"
+                    accept="image/jpeg, image/jpg, image/png"
+                    placeholder="Selecciona una imagen"
                 />
-                <mat-error *ngIf="myPost.imgUrl">Selecciona una imagen válida (JPEG, JPG, PNG)</mat-error>
-               
+              
+                
+
 
             @if (!editing){
                 <button
