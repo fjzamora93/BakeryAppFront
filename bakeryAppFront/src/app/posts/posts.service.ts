@@ -148,7 +148,7 @@ export class PostsService {
     
         // Agrega la imagen si es un archivo
         if (post.imgUrl instanceof File) {
-            formData.append('image', post.imgUrl); //! 'image' es el nombre que espera el backend el MULTER!!!
+            formData.append('file', post.imgUrl); //! 'image' es el nombre que espera el backend el MULTER!!!
         }
     
         return this.csrfService.getHeaders().pipe(
