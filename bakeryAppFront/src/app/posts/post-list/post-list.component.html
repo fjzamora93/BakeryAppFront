@@ -1,13 +1,14 @@
 
 
-
 <section>
+    <app-search (filteredPosts)="fetchFilteredPosts($event)"/>
 
     <app-paginator  [posts]="posts" [(slicedPosts)] = "slicedPosts"/>
 
     
     <mat-accordion multi="false" *ngIf="posts.length; else noPosts">
 
+        
         @for (post of slicedPosts ; track post._id;) {
            
                 <mat-expansion-panel>

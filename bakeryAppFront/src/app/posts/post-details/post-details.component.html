@@ -26,7 +26,11 @@
             </mat-card-header>
             
             <mat-card-content>
-                <p>{{ postDetails.content }}</p>
+
+                @for(parrafo of content; track parrafo) {
+                    <p>{{ parrafo }}</p>
+                }
+             
                 
                 <img src="{{ postDetails.imgUrl }}" alt="{{ postDetails.imgUrl }}" mat-card-image>
             
@@ -57,10 +61,13 @@
             
             <mat-card-footer>
                 <h3>Recetas relacionadas</h3>
-                <p> {{ postDetails.category }}</p>
+             
+                <app-tags [tagList]="postDetails!.category" (onPostSelected)="changingPost($event)"/>
             </mat-card-footer>
           </mat-card>
         
     }
+
+    
 </section>
 

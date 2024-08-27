@@ -8,6 +8,7 @@ button[mat-fab]{
 :host{
     margin: auto;
     display: inline;
+
 }
 
 .button-edit{
@@ -63,7 +64,7 @@ img{
 
 
 mat-card{
-    padding: 20px 10%;
+    padding: 20px 5%;
 }
 section{
     padding: 20px 15% 20px;

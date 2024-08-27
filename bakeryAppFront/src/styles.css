@@ -1,4 +1,21 @@
 
+a {
+    text-decoration: none; /* Quita el subrayado de los enlaces */
+    color: inherit; /* Hereda el color del texto del elemento padre */
+    /* Puedes agregar más reglas aquí para personalizar los enlaces */
+}
+
+/* Opcional: Si también deseas quitar el color de los enlaces cuando se pasan sobre ellos */
+a:hover, a:focus {
+    color: inherit; /* Mantiene el color del texto del elemento padre */
+    text-decoration: none; /* Quita el subrayado al pasar el cursor sobre el enlace */
+}
+
+/* Opcional: Estilos para enlaces visitados */
+a:visited {
+    color: inherit; /* Mantiene el color del texto del elemento padre */
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 

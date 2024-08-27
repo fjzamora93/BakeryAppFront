@@ -1,0 +1,21 @@
+
+<div>
+    @for (tag of tagList; track tag) {
+        <mat-chip (click)="onTagSelected(tag)">
+            {{ tag }}
+        </mat-chip>
+    }
+</div>
+
+@for (post of similarPosts; track post){
+    <a href="#{{ post._id}}">
+        <mat-card class="card" id="resume-card" (click)="selectingPost(post)">
+            
+                <mat-card-header>
+                    <mat-card-title>{{ post.title }}</mat-card-title>
+                </mat-card-header>
+                <img mat-card-image src="{{ post.imgUrl }}" alt="{{ post.imgUrl }}">
+           
+        </mat-card>
+     </a>
+}

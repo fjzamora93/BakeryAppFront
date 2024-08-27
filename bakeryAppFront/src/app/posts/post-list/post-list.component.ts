@@ -8,7 +8,15 @@ import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
 import { PostCreateComponent } from '../post-create/post-create.component';
 import { PaginatorComponent } from '../../shared/paginator/paginator.component';
+import { SearchComponent } from '../../shared/search/search.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
+import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
+import {AsyncPipe} from '@angular/common';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 
 
@@ -17,17 +25,25 @@ import { PaginatorComponent } from '../../shared/paginator/paginator.component';
     standalone: true,
     templateUrl: './post-list.component.html',
     styleUrls: ['./post-list.component.css'],
-    imports: [CommonModule, MaterialModule, PostCreateComponent, PaginatorComponent]
+    imports: [CommonModule, MaterialModule, PostCreateComponent, PaginatorComponent, SearchComponent,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule,
+        AsyncPipe,
+    ]
 })
 export class PostListComponent implements OnInit, OnDestroy {
     @Output() postSelected = new EventEmitter<Post>();
     posts: Post[] = [];
     slicedPosts : Post[] = [];
-
+    myControl = new FormControl('');
     private postsSub?: Subscription;
+    filteredPosts$?: Observable<Post[]>;
     editing: boolean = false;
     myPost!: Post;
-
+    postsFiltered: Post[] = [];
 
     constructor(public postsService: PostsService) {}
 
@@ -40,6 +56,8 @@ export class PostListComponent implements OnInit, OnDestroy {
         });
     }   
 
+
+
     ngOnDestroy() {
         this.postsSub?.unsubscribe();
     }
@@ -48,6 +66,10 @@ export class PostListComponent implements OnInit, OnDestroy {
     onSelectingPost(post: Post) {
         this.postSelected.emit(post);
     }
-   
+
+    
+    fetchFilteredPosts(filteredPosts: Post[]) {
+        this.posts = filteredPosts;
+    }
 
 }

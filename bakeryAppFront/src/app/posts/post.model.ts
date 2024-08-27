@@ -10,7 +10,7 @@ export interface Post {
     url?: string;
     imgUrl?: File | string;
     attachedFile?: string;
-    category?: string;
+    category?: string[]; 
     date?: string;
     price?: number;
     status?: 'draft' | 'published' | 'archived';

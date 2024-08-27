@@ -11,28 +11,39 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 
 
 import { Component } from '@angular/core';
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-formlist',
   standalone: true,
-  imports: [ FormsModule, MaterialModule, MatDialogModule],
+  imports: [ FormsModule, MaterialModule, MatDialogModule, CdkDropList, CdkDrag],
   templateUrl: './formlist.component.html',
   styleUrl: './formlist.component.css'
 })
 export class FormlistComponent {
     @Input() items: string[] = [];
     @Output() itemsChange = new EventEmitter<string[]>();
+    @Input() formTitle: string = "";
 
     newItem: string = "";
 
 
     addItem() {
         if (this.newItem) {
-        this.items.push(this.newItem);
-        console.log('Items:', this.items);
-        this.newItem = '';
-        this.itemsChange.emit(this.items);
+            this.items.push(this.newItem);
+            console.log('Items:', this.items);
+            this.newItem = '';
+            this.itemsChange.emit(this.items);
         }
     }
 
+    editItem(index: number) {
+        this.newItem = this.items[index];
+        this.items.splice(index, 1);
+        this.itemsChange.emit(this.items);
+    }
+
+    drop(event: CdkDragDrop<string[]>) {
+        moveItemInArray(this.items, event.previousIndex, event.currentIndex);
+      }
 }

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {FormControl, FormsModule, ReactiveFormsModule, NgForm} from '@angular/forms';
+
 import { MaterialModule } from '../../material/material.module'; // Ruta al módulo de Material
 import { PostsService } from '../posts.service';
 import { HttpClient } from '@angular/common/http';
@@ -10,14 +10,21 @@ import { Observable, catchError, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormlistComponent } from '../../shared/formlist/formlist.component';
+import { MatOption } from '@angular/material/core';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
 
-
+/** @title Select with custom trigger text */
 @Component({
   selector: 'app-post-create',
   standalone: true,
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css'],
-  imports: [CommonModule, FormsModule, MaterialModule, MatDialogModule, FormlistComponent]
+  imports: [CommonModule, FormsModule, MaterialModule, 
+    MatDialogModule, FormlistComponent, 
+    MatOption, MatFormFieldModule, MatSelectModule,
+      ReactiveFormsModule
+  ]
 })
 export class PostCreateComponent {
     
@@ -26,6 +33,10 @@ export class PostCreateComponent {
     posts: Post[] = []; // Define la propiedad posts
     myPost: Post;
     file: File | string = "";
+    // Opciones de categoría
+    formControl = new FormControl('');
+
+    categoryList: string[] = ['repostería', 'invierno', 'verano', 'comidas', 'cenas', 'desayunos', 'meriendas'];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any, 
@@ -48,7 +59,7 @@ export class PostCreateComponent {
                     url: '',
                     imgUrl: '',
                     attachedFile: '',
-                    category: '',
+                    category: [],
                     date: '',
                     price: 0,
                     status: 'draft',
@@ -66,10 +77,10 @@ export class PostCreateComponent {
     // Método para agregar un nuevo post
     onAddPost(form: NgForm) {
         if (form.invalid) return;
+
         const { title, description } = form.value;
         this.myPost.title = title;
         this.myPost.description = description;
-        this.myPost._id = (Math.floor(Math.random() * 10000) + 1).toString();
         this.uploadPost(this.myPost, form);
         this.dialogRef.close();
     }
@@ -89,23 +100,18 @@ export class PostCreateComponent {
         this.dialogRef.close();
     }
 
-
-
     onUpdatePost(form: NgForm) {
         if (form.invalid) return;
-    
-        this.myPost._id = form.value._id;
-        this.myPost.title = form.value.title;
-        this.myPost.description = form.value.description;
-        this.myPost.content = form.value.content;
-    
-        if (this.myPost.imgUrl instanceof File) {
-            console.log("EL PUTO FILE ANTES DE QUE PASE POR IMGUR: ", this.myPost.imgUrl);
+        console.log('Categoria:', this.formControl.value);
+       
+        if (Array.isArray(this.formControl.value) && this.formControl.value.every(item => typeof item === 'string')) {
+            this.myPost.category = this.formControl.value;
         }
-    
+        
+        // this.formControl.setValue(this.myPost.category);
         this.postsService.updatePostFormData(this.myPost).pipe(
             tap(response => {
-                console.log('Post updated successfully:', response);
+                console.log('Post updated:', response);
                 this.postsService.getPosts();
             }),
             catchError(error => {

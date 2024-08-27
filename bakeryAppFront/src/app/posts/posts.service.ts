@@ -13,12 +13,23 @@ export class PostsService {
     private apiUrl = environment.apiUrl + '/posts';
     private posts: Post[] = [];
     private postsUpdated = new Subject<Post[]>();
-    public imgurLink: string = "default link";
-    private postDetails?: Post;
-
-
+    public postSelected?: Post;
     private newPosts: Post[] = [];
     constructor(private http: HttpClient, private csrfService: CsrfService) {}
+
+    getAllPosts(): Post[] {
+        return this.posts;
+    }
+
+    getPostFilteredByString(searchString: string) {
+        return this.posts.filter(post => post.title.toLowerCase().includes(searchString.toLowerCase()));
+      }
+    
+    getPostsByCategory(category: string): Post[] {
+        console.log(this.posts.filter(post => post.category!.includes(category)))
+        return this.posts.filter(post => post.category!.includes(category));
+    }
+
 
     // Método para obtener posts
     getPosts(): void {
@@ -27,20 +38,21 @@ export class PostsService {
                 tap(postData => {
                     this.posts = postData.posts;
                     this.postsUpdated.next([...this.posts]);
+                    const randomIndex = Math.floor(Math.random() * this.posts.length);
+                    this.postSelected = this.posts[randomIndex];
                 }),
                 catchError(error => {
                     console.error('Error fetching posts:', error);
-                    return of({ message: '', posts: [] }); // Retorna un observable vacío en caso de error
+                    return of({ message: '', posts: [] }); 
                 })
             )
-            .subscribe(); // Suscribirse para iniciar la solicitud
+            .subscribe(); 
     }
 
     // Método para obtener un observable de actualizaciones de posts
     getPostUpdateListener(): Observable<Post[]> {
         return this.postsUpdated.asObservable();
     }
-
 
 
     // Método para agregar un nuevo post
@@ -69,8 +81,7 @@ export class PostsService {
     deletePost(postId: string): Observable<any> {
         return this.csrfService.getHeaders().pipe(
             switchMap(headers => {
-                console.log('Intentando borrar en el front:', postId);
-                console.log(`${this.apiUrl}/${postId}`)
+                console.log('Intentando borrar en el front:', postId, `${this.apiUrl}/${postId}`)
                 return this.http.delete(`${this.apiUrl}/${postId}`, { headers, withCredentials: true }).pipe(
                     catchError(error => {
                         console.error('Error deleting post:', error);
@@ -81,23 +92,85 @@ export class PostsService {
         );
     }
 
-    updatePost(post: Post): Observable<any> {
-        const postId= post._id;
+    
+
+    updatePostFormData(post: Post): Observable<any> {
+        const postId = post._id; 
+        const formData: FormData = new FormData();
+    
+        // Agrega los campos del post a FormData
+        formData.append('title', post.title);
+        formData.append('description', post.description || '');
+        formData.append('content', post.content || '');
+        formData.append('status', post.status || '1');
+        formData.append('date', post.date || '30 minutos');
+
+        // Enviar cada elemento de 'items', 'categoria' y 'steps' individualmente
+
+        if (post.category) {
+            post.category.forEach((cat, index) => {
+                console.log('Categoría:', cat);
+                formData.append(`category[${index}]`, cat);
+            });
+        }
+
+        if (post.items) {
+            post.items.forEach((item, index) => {
+                formData.append(`items[${index}]`, item);
+            });
+        }
+
+        if (post.steps) {
+            post.steps.forEach((step, index) => {
+                formData.append(`steps[${index}]`, step);
+            });
+        }
+        
+        //! 'file' es el nombre que configuramos para recibir en el backend el MULTER!
+        if (post.imgUrl instanceof File) {
+            formData.append('file', post.imgUrl); 
+        }
+    
         return this.csrfService.getHeaders().pipe(
-        switchMap(headers => {
-            console.log('Intentando actualizar en el front:', post);
-            const body = post;
-            return this.http.put(this.apiUrl + '/' + postId, body, { headers, withCredentials: true }).pipe(
-            catchError(error => {
-                console.error('Error updating post:', error);
-                return of(error);
+            switchMap(headers => {
+                // No se puede usar 'Content-Type': 'multipart/form-data' porque el navegador lo establece automáticamente
+                const updatedHeaders = headers.delete('Content-Type');
+                return this.http.put(`${this.apiUrl}/${postId}`, formData, {
+                    headers: updatedHeaders,
+                    withCredentials: true
+                }).pipe(
+                    catchError(error => {
+                        console.error('Error updating post:', error);
+                        return of(error);
+                    })
+                );
             })
-            );
-        })
+        );
+    }
+    
+    
+    /**
+     * @deprecated
+     * Este método envía un JSON en lugar de un FormData, lo que impide el manejo de archivos e imágenes.
+     */
+    updatePostJSON(post: Post): Observable<any> {
+        return this.csrfService.getHeaders().pipe(
+            switchMap(headers => {
+                console.log('Intentando actualizar en el front:', post);
+                return this.http.put(this.apiUrl + '/' + post._id, post, { headers, withCredentials: true }).pipe(
+                    catchError(error => {
+                        console.error('Error updating post:', error);
+                        return of(error);
+                    })
+                );
+            })
         );
     }
 
-
+    /**
+     * @deprecated
+     * Subida de imágenes desde el front, ahora las subimos desde el backend
+     */
     uploadToImgur(file: File): Observable<string> {
         const formData: FormData = new FormData();
         formData.append('image', file);
@@ -126,50 +199,6 @@ export class PostsService {
             });
         });
     }
-    
-    
-
-
-
-
-    updatePostFormData(post: Post): Observable<any> {
-        const postId = post._id; // Asegúrate de que 'post._id' esté definido y no sea nulo
-        const formData: FormData = new FormData();
-    
-        // Agrega los campos del post a FormData
-        formData.append('title', post.title);
-        formData.append('description', post.description || '');
-        formData.append('content', post.content);
-        if (post.items) formData.append('items', JSON.stringify(post.items));
-        if (post.steps) formData.append('steps', JSON.stringify(post.steps));
-        if (post.category) formData.append('category', post.category);
-        if (post.status) formData.append('status', post.status);
-        if (post.date) formData.append('date', post.date);
-    
-        // Agrega la imagen si es un archivo
-        if (post.imgUrl instanceof File) {
-            formData.append('file', post.imgUrl); //! 'image' es el nombre que espera el backend el MULTER!!!
-        }
-    
-        return this.csrfService.getHeaders().pipe(
-            switchMap(headers => {
-                // No se puede usar 'Content-Type': 'multipart/form-data' porque el navegador lo establece automáticamente
-                const updatedHeaders = headers.delete('Content-Type');
-                return this.http.put(`${this.apiUrl}/${postId}`, formData, {
-                    headers: updatedHeaders,
-                    withCredentials: true
-                }).pipe(
-                    catchError(error => {
-                        console.error('Error updating post:', error);
-                        return of(error);
-                    })
-                );
-            })
-        );
-    }
-    
-    
-
 
 }
 

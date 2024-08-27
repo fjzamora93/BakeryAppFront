@@ -14,6 +14,7 @@
                 #_id="ngModel" > 
 
                 <mat-form-field>
+                    <mat-label>Título de la receta</mat-label>
                     <input matInput type="text" required
                         name="title" [(ngModel)]="myPost.title" #title="ngModel"
                         placeholder="Título de la receta">
@@ -21,6 +22,7 @@
                 </mat-form-field>
 
                 <mat-form-field>
+                    <mat-label>Descripción corta</mat-label>
                     <textarea matInput required required rows="2" 
                         name="description" [(ngModel)]="myPost.description" #description="ngModel"
                         placeholder="Incluye un resumen breve de la receta (1 o dos líneas)">
@@ -29,6 +31,7 @@
                 </mat-form-field>
 
                 <mat-form-field>
+                    <mat-label>Descripción larga</mat-label>
                     <textarea matInput  required rows="4" 
                         name="content" [(ngModel)]="myPost.content" #content="ngModel"
                         placeholder="Explica en más detalles en qué consiste la receta: origen, ocasiones en las que te gusta hacerla, por qué te gusta...">
@@ -37,10 +40,11 @@
                 </mat-form-field>
 
                 
-                <app-formlist [(items)]="myPost.items!"/>
-                <app-formlist [(items)]="myPost.steps!"/>
+                <app-formlist [(items)]="myPost.items!" formTitle="Ingredientes"/>
+                <app-formlist [(items)]="myPost.steps!" formTitle="Instrucciones"/>
 
                 <mat-form-field>
+                    <mat-label>Tiempo de elaboración</mat-label>
                     <input matInput type="text" required
                         name="date" [(ngModel)]="myPost.date" #date="ngModel"
                         placeholder="¿Cuánto tiempo se tarda?">
@@ -48,13 +52,22 @@
                 </mat-form-field>
                 
                 <mat-form-field>
-                    <input matInput type="text" required
-                        name="category" [(ngModel)]="myPost.category" #category="ngModel"
-                        placeholder="Introduce la categoría">
-                    <mat-error *ngIf="category.invalid">Introduce la categoría</mat-error>
+                    <mat-label>Categoría</mat-label>
+                    <mat-select [formControl]="formControl" multiple>
+
+                        <!--- Esto muestra el campo de selección, por defecto el primer índice de los items seleccinados-->
+                        <mat-select-trigger>
+                            {{formControl.value?.[0] || ''}}
+                        </mat-select-trigger>
+
+                        @for (item of categoryList; track item) {
+                            <mat-option [value]="item">{{item}}</mat-option>
+                    }
+                    </mat-select>
                 </mat-form-field>
                 
                 <mat-form-field>
+                    <mat-label>Nivel de dificultad</mat-label>
                     <input matInput type="text" required
                         name="status" [(ngModel)]="myPost.status" #status="ngModel"
                         placeholder="¿Cómo de difícil es la receta?">
@@ -69,7 +82,8 @@
                     <mat-error *ngIf="title.invalid">Introduce el link de la imagen.</mat-error>
                 </mat-form-field> -->
 
-                <input
+
+                <input id="file"
                     type="file"
                     required
                     name="image"

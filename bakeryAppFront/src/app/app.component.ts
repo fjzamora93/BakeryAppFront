@@ -50,6 +50,9 @@ export class AppComponent {
         console.log('Post selected:', post); // Verifica que esto muestre el post en la consola
         this.postSelected = post;
     }
-
   
 }
+
+function delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }

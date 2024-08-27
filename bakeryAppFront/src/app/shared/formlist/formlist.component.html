@@ -1,15 +1,25 @@
 <form>
+    <mat-label>{{ formTitle }}</mat-label>
     <mat-form-field style="display: inline; width: 70%">
         <button mat-raised-button type="button" color="primary" (click)="addItem()" id="button-add"> 
             <i class="material-icons">add_circle</i>
         </button>
-        <input id="item-list" matInput placeholder="¡Añade un objeto a la lista!" [(ngModel)]="newItem" name="newItem" (keyup.enter)="addItem()">
+        <input id="item-list" matInput placeholder="¡Añade más {{formTitle}} a la lista!" [(ngModel)]="newItem" name="newItem" (keyup.enter)="addItem()">
     </mat-form-field>
     
-    <ul>
-        @for (item of items; track item){
-            <li>{{item}}</li>
-        }
-    </ul>
+    @if (items.length > 0) {
+        <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+            @for (item of items; track item; let idx = $index){
+    
+                <div class="example-box" cdkDrag>
+                    <button mat-fab type="button" color="primary" (click)="editItem($index)" id="button-edit"> 
+                        <i class="material-icons">edit</i>
+                    </button>
+                    {{item}}
+                </div>
+            }
+        </div>
+    }
+    
 </form>
 

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { Post } from '../../posts/post.model';
+import { PostsService } from '../../posts/posts.service';
 
 @Component({
   selector: 'app-paginator',
@@ -11,10 +12,8 @@ import { Post } from '../../posts/post.model';
 })
 export class PaginatorComponent implements OnChanges {
 
-    @Input() posts!: Post[];
+    @Input() posts?: Post[];
     @Input() slicedPosts!: Post[];
-    
-
     @Output() slicedPostsChange = new EventEmitter<Post[]>();
 
     currentPage:number = 1;
@@ -24,30 +23,32 @@ export class PaginatorComponent implements OnChanges {
 
     endIndex:number = this.startIndex + this.step;
 
+    constructor(public postsService: PostsService) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['posts'] && this.posts) {
             this.totalPages = Math.ceil(this.posts.length / this.step);
-            this.slicedPosts = this.posts.slice(this.startIndex, this.endIndex);
-            this.slicedPostsChange.emit(this.slicedPosts);
+            setTimeout(() => {
+                this.slicedPosts = this.posts!.slice(this.startIndex, this.endIndex);
+                this.slicedPostsChange.emit(this.slicedPosts);
+            });
         }
+        
     }
 
    
         
     
     onPaginateChangeFollowing() {
-        this.totalPages = Math.ceil(this.posts.length / this.step);
-
-
-        if (this.endIndex >= this.posts.length) {
+        this.totalPages = Math.ceil(this.posts!.length / this.step);
+        if (this.endIndex >= this.posts!.length) {
             return;
         }
         this.currentPage += 1;
         this.startIndex +=this.step;
         this.endIndex +=this.step;
-        this.slicedPostsChange.emit(this.posts.slice(this.startIndex, this.endIndex));
-        console.log(this.startIndex);
+        this.slicedPostsChange.emit(this.posts!.slice(this.startIndex, this.endIndex));
+
     }
 
     onPaginateChangePrevious() {
@@ -57,8 +58,7 @@ export class PaginatorComponent implements OnChanges {
         this.currentPage -= 1;
         this.startIndex -=this.step;
         this.endIndex -=this.step;
-        this.slicedPostsChange.emit(this.posts.slice(this.startIndex, this.endIndex));
-        console.log(this.startIndex);
+        this.slicedPostsChange.emit(this.posts!.slice(this.startIndex, this.endIndex));
     }
 
 

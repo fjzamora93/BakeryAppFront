@@ -1,12 +1,14 @@
 
 button{
+    margin: 0px;
     margin-right: 10px;
+    
 }
 
-#button-add{
-    float: right;
+#file{
+    display: block;
+    margin: 20px;
 }
-
 #item-list{
     display: inline;
     max-width: 80%;
@@ -24,3 +26,7 @@ button{
   mat-form-field, h1, div{
     display: block;
   }
+
+  mat-label{
+    font-size: 1.1em;
+}
