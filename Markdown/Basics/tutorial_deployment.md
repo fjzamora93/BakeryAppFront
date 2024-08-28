@@ -37,6 +37,7 @@ Compilar en tu github:
 En este caso:
 
     npm run build -- --base-href "https://fjzamora93.github.io/AngularTutorial/"
+    npm run build -- --base-href "https://fjzamora93.github.io/bakeryAppFront/"
     
 Después procedemos a instalar Angular Globalmente (solo la primera vez)
 
@@ -48,6 +49,7 @@ Después procedemos a instalar Angular Globalmente (solo la primera vez)
 Para desplegar el proyecto usaremos este comando:
 
     npx angular-cli-ghpages --dir=dist/<nombre-directorio-local>/browser
+    npx angular-cli-ghpages --dir=dist/bakeryAppFront/browser
 
 En este último paso remplazza <nombre-directorio> por el nombre de lo que se haya generado dentro de la carpeta dist, que puede coger un nombre random.
 

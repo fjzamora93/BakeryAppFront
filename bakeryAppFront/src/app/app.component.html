@@ -1,10 +1,12 @@
 <app-header></app-header>
 <app-navigation/>
 
-<app-post-list (postSelected)="onSelectingPost($event)"></app-post-list>
+
+<router-outlet/>
+
+<app-post-list (postSelected)="onSelectingPost($event)"/>
 
 <app-post-details [postDetails]="postSelected" />
-
 
 
 

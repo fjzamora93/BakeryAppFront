@@ -12,13 +12,10 @@ import { FooterComponent } from "./footer/footer.component";
 import { PostsService } from './posts/posts.service';
 import { Subscription } from 'rxjs';
 import { LoginComponent } from './auth/login/login.component';
-import { AuthGuard } from './auth/auth.guard';
+import { authGuard } from './auth.guard';
+import { MatInputModule } from '@angular/material/input';
 
-const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-    { path: 'create', component: PostCreateComponent, canActivate: [AuthGuard] },
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
-  ];
+
 
 @Component({
   selector: 'app-root',
@@ -27,7 +24,7 @@ const routes: Routes = [
   styleUrls: ['./app.component.css'],
   imports: [RouterOutlet, CommonModule, PostCreateComponent, HeaderComponent,
     PostListComponent, MaterialModule, PostDetailsComponent,
-    NavigationComponent, FooterComponent]
+    NavigationComponent, FooterComponent, ]
 })
 export class AppComponent {
     title = 'bakeryAppFront';

@@ -18,7 +18,7 @@ export class CsrfService {
     return this.http.get<{ csrfToken: string }>(`${this.apiUrl}/csrf-token`, { withCredentials: true }).pipe(
       tap(response => {
         this.csrfToken = response.csrfToken;
-        // console.log('CSRF Token received:', this.csrfToken);
+        console.log('CSRF Token received:', this.csrfToken, '=>', response, this.apiUrl);
       }),
       map(response => response.csrfToken),
       catchError(error => {
