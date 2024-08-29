@@ -77,13 +77,43 @@ export class PostCreateComponent {
     // Método para agregar un nuevo post
     onAddPost(form: NgForm) {
         if (form.invalid) return;
+        if (Array.isArray(this.formControl.value) && this.formControl.value.every(item => typeof item === 'string')) {
+            this.myPost.category = this.formControl.value;
+        }
+        this.postsService.addPost(this.myPost).subscribe(
+            response => {
+                console.log('Post added successfully:', response);
+                this.postsService.getPosts(); 
+                form.resetForm(); 
+            },
+            error => {
+                console.error('Error adding post:', error);
+            }
+        )
+        this.dialogRef.close()
+    ;}
 
-        const { title, description } = form.value;
-        this.myPost.title = title;
-        this.myPost.description = description;
-        this.uploadPost(this.myPost, form);
+  
+    
+    onUpdatePost(form: NgForm) {
+        if (form.invalid) return;
+        if (Array.isArray(this.formControl.value) && this.formControl.value.every(item => typeof item === 'string')) {
+            this.myPost.category = this.formControl.value;
+        }
+        // this.formControl.setValue(this.myPost.category);
+        this.postsService.updatePostFormData(this.myPost).pipe(
+            tap(response => {
+                console.log('Post updated:', response);
+                this.postsService.getPosts();
+            }),
+            catchError(error => {
+                console.error('Error updating post', error);
+                return of(null);
+            })
+        ).subscribe();
         this.dialogRef.close();
     }
+    
 
     //Método para eliminar un post
     onDeletePost(postId: string) {
@@ -100,45 +130,9 @@ export class PostCreateComponent {
         this.dialogRef.close();
     }
 
-    onUpdatePost(form: NgForm) {
-        if (form.invalid) return;
-        console.log('Categoria:', this.formControl.value);
-       
-        if (Array.isArray(this.formControl.value) && this.formControl.value.every(item => typeof item === 'string')) {
-            this.myPost.category = this.formControl.value;
-        }
-        
-        // this.formControl.setValue(this.myPost.category);
-        this.postsService.updatePostFormData(this.myPost).pipe(
-            tap(response => {
-                console.log('Post updated:', response);
-                this.postsService.getPosts();
-            }),
-            catchError(error => {
-                console.error('Error updating post', error);
-                return of(null);
-            })
-        ).subscribe();
-    
-        this.dialogRef.close();
-    }
     
 
     
-    
-
-    // Usa el token CSRF al agregar el post
-    uploadPost(post: Post, form: NgForm) {
-        this.postsService.addPost(this.myPost).subscribe(
-            response => {
-                console.log('Post added successfully:', response);
-                this.postsService.getPosts(); // Actualiza la lista de posts después de agregar uno nuevo
-                form.resetForm(); 
-            },
-            error => {
-                console.error('Error adding post:', error);
-            }
-    )};
 
 
 

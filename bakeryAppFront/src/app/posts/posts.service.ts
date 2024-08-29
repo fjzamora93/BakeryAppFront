@@ -57,25 +57,79 @@ export class PostsService {
 
 
     // Método para agregar un nuevo post
+    addPostFormData(post: Post): Observable<any> {
+        const postId = post._id; 
+        const formData: FormData = new FormData();
+    
+        // Agrega los campos del post a FormData
+        formData.append('title', post.title);
+        formData.append('description', post.description || '');
+        formData.append('content', post.content || '');
+        formData.append('status', post.status || '1');
+        formData.append('date', post.date || '30 minutos');
+
+        // Enviar cada elemento de 'items', 'categoria' y 'steps' individualmente
+
+        if (post.category) {
+            post.category.forEach((cat, index) => {
+                console.log('Categoría:', cat);
+                formData.append(`category[${index}]`, cat);
+            });
+        }
+
+        if (post.items) {
+            post.items.forEach((item, index) => {
+                formData.append(`items[${index}]`, item);
+            });
+        }
+
+        if (post.steps) {
+            post.steps.forEach((step, index) => {
+                formData.append(`steps[${index}]`, step);
+            });
+        }
+        
+        //! 'file' es el nombre que configuramos para recibir en el backend el MULTER!
+        if (post.imgUrl instanceof File) {
+            formData.append('file', post.imgUrl); 
+        }
+    
+        return this.csrfService.getHeaders().pipe(
+            switchMap(headers => {
+                // No se puede usar 'Content-Type': 'multipart/form-data' porque el navegador lo establece automáticamente
+                const updatedHeaders = headers.delete('Content-Type');
+                return this.http.put(`${this.apiUrl}/${postId}`, formData, {
+                    headers: updatedHeaders,
+                    withCredentials: true
+                }).pipe(
+                    catchError(error => {
+                        console.error('Error updating post:', error);
+                        return of(error);
+                    })
+                );
+            })
+        );
+    }
+
     addPost(post: Post): Observable<any> {
         this.newPosts.push(post); 
         console.log('NUEVO POST:', post);
 
         // Obtener encabezados con el token CSRF
         return this.csrfService.getHeaders().pipe(
-        switchMap(headers => {
-            const body = post;
-            return this.http.post<Post>(
-                this.apiUrl, 
-                body, 
-                { headers, withCredentials: true }
-            ).pipe(
-            catchError(error => {
-                console.error('Error adding post:', error);
-                return of(error);
+            switchMap(headers => {
+                const body = post;
+                return this.http.post<Post>(
+                    this.apiUrl, 
+                    body, 
+                    { headers, withCredentials: true }
+                ).pipe(
+                catchError(error => {
+                    console.error('Error adding post:', error);
+                    return of(error);
+                })
+                );
             })
-            );
-        })
         );
     }
 
