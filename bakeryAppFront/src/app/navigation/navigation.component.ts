@@ -22,13 +22,11 @@ export class NavigationComponent {
 
 
     redirectToBackend() {
-        // Redirige a una URL externa (backend)
-        window.location.href = 'http://localhost:3000';
+       
       }
     
     navigateToFrontendPage() {
-        // Navega a una ruta interna en el frontend (Angular)
-        this.router.navigate(['http://localhost:4200']);
+        
       }
 
       addPostOverlay() {

@@ -33,6 +33,7 @@ export class PostsService {
 
     // Método para obtener posts
     getPosts(): void {
+        console.log('Api URL:', this.apiUrl);
         this.http.get<{ message: string; posts: Post[] }>(this.apiUrl, { withCredentials: true })
             .pipe(
                 tap(postData => {
