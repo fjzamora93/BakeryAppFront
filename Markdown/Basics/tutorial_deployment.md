@@ -3,7 +3,8 @@
 ## 1.Compilación del código básica
 
 ```powershell
-    ng build
+    ng build 
+    ng build --configuration production
 ```
 
 *o bien este otro:*
@@ -37,7 +38,7 @@ Compilar en tu github:
 En este caso:
 
     npm run build -- --base-href "https://fjzamora93.github.io/AngularTutorial/"
-    npm run build -- --base-href "https://fjzamora93.github.io/bakeryAppFront/"
+    npm run build -- --base-href "https://fjzamora93.github.io/BakeryAppFront/"
     
 Después procedemos a instalar Angular Globalmente (solo la primera vez)
 
@@ -50,6 +51,8 @@ Para desplegar el proyecto usaremos este comando:
 
     npx angular-cli-ghpages --dir=dist/<nombre-directorio-local>/browser
     npx angular-cli-ghpages --dir=dist/bakeryAppFront/browser
+
+
 
 En este último paso remplazza <nombre-directorio> por el nombre de lo que se haya generado dentro de la carpeta dist, que puede coger un nombre random.
 
@@ -77,3 +80,22 @@ En su lugar utiliza esta:
 ## Despliegue en Railway
 
 Para despliegue en Railway sin complicaciones, puedes conectar directamente con la página publicada en la rama de gh-pages. Esto generará menos problemas que intentar hacer el build directamente desde la rama master de github.
+
+
+### File replacement
+
+A la hora de trabajar con variables de entorno, dentro de la carpeta src/environments/ se pueden encontrar dos archivos: environment.ts y environment.prod.ts. Ahí tenemos que definir nuestras variables de entorno. 
+
+Además, en el archivo angujar.json nos tenemos que asegurar de que se están remplazando correctamente:
+
+```json
+"configurations": {
+              "production": {
+                "fileReplacements": [
+                    {
+                      "replace": "src/environments/environment.ts",
+                      "with": "src/environments/environment.prod.ts"
+                    }
+                  ],
+```
+
