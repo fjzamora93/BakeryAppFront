@@ -1,121 +1,71 @@
-import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable, catchError, of, switchMap, tap } from "rxjs";
+import { AuthData } from "./auth-data.model";
+import { environment } from "../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { Observable, Subject, catchError, of, switchMap, tap } from "rxjs";
-import { authGuard } from "./auth.guard";
-import { AuthData } from "./auth-data.model";
 import { CsrfService } from "../csrf.service";
-import { environment } from "../../environments/environment";
 
-@Injectable({ providedIn: "root" })
 export class AuthService {
     private apiUrl = environment.apiUrl + '/user';
-    private isAuthenticated = false;
-    private token?: string;
+    private authStatusListener = new BehaviorSubject<boolean>(false);
     private tokenTimer: any;
-    private authStatusListener = new Subject<boolean>();
 
     constructor(
-            private http: HttpClient, 
-            private router: Router,
-            private csrfService: CsrfService) {}
+        private http: HttpClient, 
+        private router: Router,
+        private csrfService: CsrfService
+    ) {}
 
-    getToken() {
-        return this.token;
-    }
-
-    getIsAuth() {
-        console.log("Is authenticated?", this.isAuthenticated);
-        return this.isAuthenticated;
-    }
-
-    getAuthStatusListener() {
+    getIsAuth(): Observable<boolean> {
         return this.authStatusListener.asObservable();
     }
 
-    createUser(email: string, password: string) {
-        const authData: AuthData = { email: email, password: password };
-        console.log("Registrando usuario", authData.email, authData.password);
+    login(email: string, password: string): Observable<any> {
+        const authData: AuthData = { email, password };
+        console.log("Attempting login with:", authData);
+
         return this.csrfService.getHeaders().pipe(
+            tap(headers => console.log('CSRF Headers:', headers)),
             switchMap(headers => {
                 return this.http.post(
-                    `${this.apiUrl}/signup`, 
-                    authData, 
+                    `${this.apiUrl}/login`,
+                    authData,
                     { headers, withCredentials: true }
                 ).pipe(
-                catchError(error => {
-                    console.error('Error adding user:', error);
-                    return of(error);
-                })
+                    tap(response => {
+                        console.log('Login Response:', response);
+                        this.setIsAuth(true);
+                    }),
+                    catchError(error => {
+                        console.error('Error during login:', error);
+                        this.setIsAuth(false);
+                        return of(error);
+                    })
                 );
+            }),
+            catchError(error => {
+                console.error('Error in getHeaders:', error);
+                return of(error);
             })
         );
-        
     }
 
-    login(email: string, password: string): Observable<any> {
-        const authData: AuthData = { email: email, password: password };
-        console.log("Attempting login with:", authData);
-    
-        return this.csrfService.getHeaders().pipe(
-        tap(headers => console.log('CSRF Headers:', headers)),
-        switchMap(headers => {
-            return this.http.post(
-            `${this.apiUrl}/login`,
-            authData,
-            { headers, withCredentials: true }
-            ).pipe(
-                tap(response => {
-                    console.log('Login Response:', response),
-                    this.isAuthenticated = true;}),
-                catchError(error => {
-                    console.error('Error during login:', error);
-                    return of(error);
-                })
-            );
-        }),
-        catchError(error => {
-            console.error('Error in getHeaders:', error);
-            return of(error);
-        })
-        );
-    }
-    
-
-    autoAuthUser() {
-        const authInformation = this.getAuthData();
-        if (!authInformation) {
-        return;
-        }
-        const now = new Date();
-        const expiresIn = authInformation.expirationDate.getTime() - now.getTime();
-        if (expiresIn > 0) {
-        this.token = authInformation.token;
-        this.isAuthenticated = true;
-        this.setAuthTimer(expiresIn / 1000);
-        this.authStatusListener.next(true);
-        }
+    setIsAuth(isAuth: boolean) {
+        this.authStatusListener.next(isAuth);
     }
 
     logout() {
-        this.token = undefined;
-        this.isAuthenticated = false;
-        this.authStatusListener.next(false);
         clearTimeout(this.tokenTimer);
         this.clearAuthData();
-        this.router.navigate(["/"]);
+        this.setIsAuth(false);
+        this.router.navigate(['/']);
     }
 
     private setAuthTimer(duration: number) {
         console.log("Setting timer: " + duration);
         this.tokenTimer = setTimeout(() => {
-        this.logout();
+            this.logout();
         }, duration * 1000);
-    }
-
-    private saveAuthData(token: string, expirationDate: Date) {
-        localStorage.setItem("token", token);
-        localStorage.setItem("expiration", expirationDate.toISOString());
     }
 
     private clearAuthData() {
@@ -127,11 +77,11 @@ export class AuthService {
         const token = localStorage.getItem("token");
         const expirationDate = localStorage.getItem("expiration");
         if (!token || !expirationDate) {
-        return;
+            return null;
         }
         return {
-        token: token,
-        expirationDate: new Date(expirationDate)
-        }
+            token,
+            expirationDate: new Date(expirationDate)
+        };
     }
 }

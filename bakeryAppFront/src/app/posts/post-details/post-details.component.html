@@ -6,20 +6,22 @@
 
         <mat-card id="{{ postDetails._id }}">
 
-            <div style="display:inline">
-                <button mat-fab (click)="showMessage()" class="button-like">
-                    <mat-icon>favorite</mat-icon>
-                </button>
-            </div>
+            
 
             <mat-card-header>
-            
-                <button mat-fab (click)="openOverlay()" class="button-edit">
-                    <mat-icon>edit</mat-icon>
-                </button>
-            
+                
+                <mat-card-title id="title">
+                    @if (isLogedIn){
+                        <button mat-fab (click)="openOverlay()" class="button-edit">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        
+                        <button mat-fab (click)="showMessage()" class="button-like">
+                            <mat-icon>favorite</mat-icon>
+                        </button>
+                    }
 
-                <mat-card-title >
+                   
                     <h1>{{ postDetails.title }}</h1>
                 </mat-card-title>
                 <mat-card-subtitle> Receta realiza por: {{ postDetails.author }}</mat-card-subtitle>

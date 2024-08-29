@@ -1,14 +1,12 @@
-<app-header></app-header>
+<app-header/>
 <app-navigation/>
 
 
 <router-outlet/>
 
-<app-post-list (postSelected)="onSelectingPost($event)"/>
-
-<app-post-details [postDetails]="postSelected" />
-
+<!--- Puesto que el body ya está en app.routes, no es necesario incluirlo aquí también --->
+<!-- <app-post-body/> -->
 
 
-<app-footer></app-footer>
+<app-footer/>
 

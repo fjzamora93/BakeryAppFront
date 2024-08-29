@@ -2,7 +2,7 @@ import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular
 import { CommonModule } from '@angular/common';
 import {FormControl, FormsModule, ReactiveFormsModule, NgForm} from '@angular/forms';
 
-import { MaterialModule } from '../../material/material.module'; // Ruta al módulo de Material
+import { MaterialModule } from '../../shared/material/material.module'; // Ruta al módulo de Material
 import { PostsService } from '../posts.service';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../post.model';
@@ -80,16 +80,16 @@ export class PostCreateComponent {
         if (Array.isArray(this.formControl.value) && this.formControl.value.every(item => typeof item === 'string')) {
             this.myPost.category = this.formControl.value;
         }
-        this.postsService.addPost(this.myPost).subscribe(
-            response => {
-                console.log('Post added successfully:', response);
+        this.postsService.addPostFormData(this.myPost).pipe(
+            tap(response => {
+                console.log('Post added :', response);
                 this.postsService.getPosts(); 
-                form.resetForm(); 
-            },
-            error => {
+            }),
+            catchError(error => {
                 console.error('Error adding post:', error);
-            }
-        )
+                return of(null);
+            })
+        ).subscribe();
         this.dialogRef.close()
     ;}
 

@@ -10,6 +10,7 @@ import { PostCreateComponent } from '../post-create/post-create.component';
 import { MatDivider } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TagsComponent } from './tags/tags.component';
+import { AuthService } from '../../auth/auth.service';
 
 
 @Component({
@@ -24,25 +25,40 @@ export class PostDetailsComponent implements OnInit  {
     @Input() isEditing: boolean = false;
     @Output() isEditingChange = new EventEmitter<boolean>();
 
+    private authStatusSub?: Subscription;
+    public isLogedIn: boolean = false;
+
+    public isAuthor: boolean = false;
+
     content: string[]  = ['Formateo el contenido del post'];
   
-    constructor(public dialog: MatDialog, private snackBar: MatSnackBar){}
+    constructor(
+        public dialog: MatDialog, 
+        private snackBar: MatSnackBar,
+        private authService: AuthService
+    ){}
   
     ngOnInit(): void {
-        console.log('Inicailizando');
+        this.authStatusSub = this.authService
+            .getIsAuth()
+            .subscribe(
+                isAuth => {
+                    this.isLogedIn = isAuth;
+            });
     }
 
     ngOnChanges(): void {
         if (this.postDetails && this.postDetails.content) {
             this.content = this.postDetails.content.split('\n');
         } else {
-            this.content = []; // O maneja el caso donde `postDetails` o `content` no están definidos
+            this.content = []; 
         }
+    
     }
 
     openOverlay() {
         this.dialog.open(PostCreateComponent, {
-            width: '80vw', // Ajusta el tamaño del overlay según sea necesario
+            width: '100vw', // Ajusta el tamaño del overlay según sea necesario
             height: '90vh', // Ajusta el tamaño del overlay según sea necesario
             backdropClass: 'custom-backdrop', // Para estilos personalizados del fondo
             panelClass: 'custom-panel-class',

@@ -2,18 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Routes } from '@angular/router';
 import { PostCreateComponent } from "./posts/post-create/post-create.component";
-import { HeaderComponent } from "./header/header.component";
+import { HeaderComponent } from "./layout/header/header.component";
 import { PostListComponent } from "./posts/post-list/post-list.component";
-import { MaterialModule } from './material/material.module'; // Ruta al módulo de Material
+import { MaterialModule } from './shared/material/material.module'; // Ruta al módulo de Material
 import { PostDetailsComponent } from './posts/post-details/post-details.component';
-import { Post } from './posts/post.model';
-import { NavigationComponent } from "./navigation/navigation.component";
-import { FooterComponent } from "./footer/footer.component";
-import { PostsService } from './posts/posts.service';
-import { Subscription } from 'rxjs';
-import { LoginComponent } from './auth/login/login.component';
-import { authGuard } from './auth.guard';
-import { MatInputModule } from '@angular/material/input';
+import { NavigationComponent } from "./layout/navigation/navigation.component";
+import { FooterComponent } from "./layout/footer/footer.component";
+import { PostBodyComponent } from "./posts/post-body.component";
 
 
 
@@ -22,31 +17,13 @@ import { MatInputModule } from '@angular/material/input';
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [RouterOutlet, CommonModule, PostCreateComponent, HeaderComponent,
-    PostListComponent, MaterialModule, PostDetailsComponent,
-    NavigationComponent, FooterComponent, ]
+  imports: [RouterOutlet, CommonModule, HeaderComponent,
+   MaterialModule, 
+    NavigationComponent, FooterComponent, PostBodyComponent]
 })
 export class AppComponent {
     title = 'bakeryAppFront';
    
-    postSelected?: Post;
-    isEditing : boolean = false;
-
-    constructor( public postsService: PostsService){}
-
-    ngOnInit() {
-        this.postsService.getPostUpdateListener()
-            .subscribe((posts: Post[]) => {
-                console.log('Posts fetched:', posts);
-                const randomIndex = Math.floor(Math.random() * posts.length);
-                this.postSelected = posts[randomIndex];
-            });    
-    }
-
-    onSelectingPost(post: Post) {
-        console.log('Post selected:', post); // Verifica que esto muestre el post en la consola
-        this.postSelected = post;
-    }
   
 }
 

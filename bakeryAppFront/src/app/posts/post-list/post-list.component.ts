@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@
 import { Subscription, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '../../material/material.module'; // Ruta al módulo de Material
+import { MaterialModule } from '../../shared/material/material.module'; // Ruta al módulo de Material
 
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';

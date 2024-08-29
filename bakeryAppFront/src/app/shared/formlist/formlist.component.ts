@@ -2,7 +2,7 @@ import { EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MaterialModule } from '../../material/material.module'; // Ruta al módulo de Material
+import { MaterialModule } from '../material/material.module'; // Ruta al módulo de Material
 
 import { Observable, catchError, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';

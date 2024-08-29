@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChange } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenu, MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
@@ -6,6 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { PostCreateComponent } from '../../posts/post-create/post-create.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../../auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navigation',
@@ -16,6 +17,9 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class NavigationComponent {
 
+    private authStatusSub?: Subscription;
+    public  isAuth: boolean = false;
+
     constructor(
         private router: Router,
         private authService: AuthService,
@@ -23,19 +27,18 @@ export class NavigationComponent {
       ) {}
 
 
-    redirectToBackend() {
-       
-      }
-    
-    navigateToFrontendPage() {
-        
-      }
+    ngOnInit() {
+        this.authStatusSub = this.authService
+            .getIsAuth()
+            .subscribe(
+                isAuth => {
+                    this.isAuth = isAuth;
+            });
+    }
 
     addPostOverlay() {
-        if (!this.authService.getIsAuth()) {
-            this.router.navigate(['/login']);
-            console.log('User is not authenticated');
-        }else{
+       
+            console.log("subiendo post:  ", this.isAuth);
             this.dialog.open(PostCreateComponent, {
                 width: '600px', 
                 backdropClass: 'custom-backdrop', 
@@ -45,6 +48,10 @@ export class NavigationComponent {
             });
         }
         
+    
+
+    onLogOut() {
+        this.authService.logout();
     }
 
 }
