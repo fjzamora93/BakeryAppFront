@@ -1,0 +1,43 @@
+
+
+<nav >
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button-movil">
+        <i class="material-icons" >menu</i>
+    </button>
+
+    <mat-menu #menu="matMenu">
+
+        <!-- Cambia el enlace a usar routerLink -->
+
+        <button mat-fab  class="menu-item" [routerLink]="'/'" >
+            <mat-icon>home</mat-icon>
+        </button>
+
+
+        <!-- Cambia el enlace a usar routerLink -->
+
+        <button mat-fab  (click)="addPostOverlay()">
+            <mat-icon>add</mat-icon>
+        </button>
+            
+ 
+    
+        <!-- Cambia el enlace a usar routerLink -->
+
+        <button mat-fab  [routerLink]="'/login'" class="menu-item" style="background-color: rgb(26, 116, 68);">
+            <mat-icon>login</mat-icon>
+        </button>
+
+
+        <!-- Cambia el enlace a usar routerLink -->
+
+        <button mat-fab  [routerLink]="'/signup'" style="background-color: brown;" class="menu-item">
+            <mat-icon>logout</mat-icon>
+        </button>
+
+        
+    </mat-menu>
+
+</nav>
+

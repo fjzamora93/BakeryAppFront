@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Observable, Subject, catchError, of, switchMap, tap } from "rxjs";
-import { authGuard } from "../auth.guard";
+import { authGuard } from "./auth.guard";
 import { AuthData } from "./auth-data.model";
 import { CsrfService } from "../csrf.service";
 import { environment } from "../../environments/environment";
@@ -25,6 +25,7 @@ export class AuthService {
     }
 
     getIsAuth() {
+        console.log("Is authenticated?", this.isAuthenticated);
         return this.isAuthenticated;
     }
 
@@ -64,11 +65,13 @@ export class AuthService {
             authData,
             { headers, withCredentials: true }
             ).pipe(
-            tap(response => console.log('Login Response:', response)),
-            catchError(error => {
-                console.error('Error during login:', error);
-                return of(error);
-            })
+                tap(response => {
+                    console.log('Login Response:', response),
+                    this.isAuthenticated = true;}),
+                catchError(error => {
+                    console.error('Error during login:', error);
+                    return of(error);
+                })
             );
         }),
         catchError(error => {

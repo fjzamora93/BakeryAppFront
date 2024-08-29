@@ -1,0 +1,92 @@
+:host {
+    display: block;
+    width: 100%;
+    margin-bottom:30px;
+    position: sticky;
+}
+
+
+a{
+    color:black;
+    text-decoration: none;
+    padding-top: 15px;
+}
+
+a p{
+    color:black;
+    text-decoration: none;
+    font-weight: 500;
+    padding-top: 10px;
+}
+
+
+.menu-button-movil{
+    width: 3em;
+    height: 3em;
+    background-color: #7d55bd;
+    border-radius: 50%;
+    opacity: 1;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.menu-button-movil i{
+    font-size: 1.5em;
+    color: white;
+    margin: auto;
+}
+
+.menu-button-movil:hover{
+    width: 3.5em;
+    height: 3.5em;
+    background-color: #7d55bd;
+    opacity: 1;
+}
+
+.menu-button-movil:hover i{
+    font-size: 2.5em;
+}
+
+.menu-item{
+    display: inline-block;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 10px;
+
+
+}
+
+::ng-deep mat-menu-content {
+    background-color: #333; /* Cambiar el color de fondo */
+    color: white; /* Cambiar el color del texto */
+    border-radius: 8px; /* Agregar borde redondeado */
+    padding: 10px; /* Ajustar el padding */
+  }
+
+button:hover i{
+    color:#ffffff;
+    font-size: 2em;
+}
+
+
+
+nav{
+    height: 70px;
+}
+
+@media (max-width: 700px) {
+
+    .menu-button-movil{
+        margin-left: auto;
+    }
+    
+    i{
+        font-size: 1.5em;
+        color: rgb(58, 53, 53);
+    }
+   
+}
