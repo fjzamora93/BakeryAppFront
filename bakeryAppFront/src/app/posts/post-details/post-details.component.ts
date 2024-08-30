@@ -1,7 +1,5 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { PostsService } from '../posts.service';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Post } from '../post.model';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MatCardModule, MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
@@ -11,7 +9,7 @@ import { MatDivider } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TagsComponent } from './tags/tags.component';
 import { AuthService } from '../../auth/auth.service';
-
+import { UserData } from '../../auth/user-data.model';
 
 @Component({
   selector: 'app-post-details',
@@ -27,6 +25,11 @@ export class PostDetailsComponent implements OnInit  {
 
     private authStatusSub?: Subscription;
     public isLogedIn: boolean = false;
+
+    private userStatusSub?: Subscription;
+
+    //! CUIDADO, la lógica está planteada para que siempre haya un usuario VACÍO (aunque no esté registrado)
+    public user?: UserData; 
 
     public isAuthor: boolean = false;
 
@@ -45,16 +48,27 @@ export class PostDetailsComponent implements OnInit  {
                 isAuth => {
                     this.isLogedIn = isAuth;
             });
+        this.userStatusSub = this.authService
+            .getUserStatus()
+            .subscribe(
+                user => {
+                    this.user = user;
+                    if (this.user && this.postDetails) {
+                        this.isAuthor = this.user._id === this.postDetails.author;
+                    }
+            });
     }
 
-    ngOnChanges(): void {
-        if (this.postDetails && this.postDetails.content) {
-            this.content = this.postDetails.content.split('\n');
-        } else {
-            this.content = []; 
+
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['postDetails'] && changes['postDetails'].currentValue) {
+            if (changes['postDetails'].currentValue.content) {
+                this.content = changes['postDetails'].currentValue.content.split('\n');
+            } 
+            this.isAuthor = this.user?._id === this.postDetails?.author;
         }
-    
-    }
+      }
 
     openOverlay() {
         this.dialog.open(PostCreateComponent, {
