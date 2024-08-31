@@ -23,7 +23,6 @@ export class AuthService {
     private token?: string;
     private tokenTimer: any;
     private authStatusListener = new BehaviorSubject<boolean>(false);
-  
     private userStatusListener = new BehaviorSubject<UserData>({} as UserData);
 
     constructor(
@@ -64,7 +63,7 @@ export class AuthService {
             tap(response => {
               console.log('Login Response:', response);
               this.setUserStatus(response.user);
-              this.setIsAuth(response.success);  // Mueve esto aquí para asegurarte de que solo se llame en éxito
+              this.setIsAuth(response.success);
             }),
             catchError(error => {
               console.error('Error during login:', error);

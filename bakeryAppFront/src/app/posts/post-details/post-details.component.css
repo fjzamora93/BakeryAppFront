@@ -79,6 +79,10 @@ mat-card-footer{
     text-align: center;
 }
 
+p, li{
+    margin-top:10px;
+}
+
 #title h1{
     display: inline;
 }

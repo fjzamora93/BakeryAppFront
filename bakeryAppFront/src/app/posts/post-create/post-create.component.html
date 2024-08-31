@@ -3,14 +3,11 @@
 
 
     <div mat-dialog-content >
-  
-       
+        <h1 mat-dialog-title>{{editing ? 'Editar receta' : 'Crear receta'}}</h1>
+
             <form  #postForm="ngForm" >
-                <input type="text" 
-                name="_id" 
-                [(ngModel)]="myPost._id" 
-                hidden 
-                #_id="ngModel" > 
+                <input type="text" name="_id" [(ngModel)]="myPost._id"  #_id="ngModel" hidden> 
+                <input type="text" name="author" [(ngModel)]="myPost.author"  #author="ngModel" hidden>
 
                 <mat-form-field>
                     <mat-label>Título de la receta</mat-label>

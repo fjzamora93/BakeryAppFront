@@ -6,13 +6,15 @@ import { MaterialModule } from '../../shared/material/material.module'; // Ruta 
 import { PostsService } from '../posts.service';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../post.model';
-import { Observable, catchError, of, switchMap, tap } from 'rxjs';
+import { Observable, Subscription, catchError, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormlistComponent } from '../../shared/formlist/formlist.component';
 import { MatOption } from '@angular/material/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { AuthService } from '../../auth/auth.service';
+import { UserData } from '../../auth/user-data.model';
 
 /** @title Select with custom trigger text */
 @Component({
@@ -33,13 +35,17 @@ export class PostCreateComponent {
     posts: Post[] = []; // Define la propiedad posts
     myPost: Post;
     file: File | string = "";
+
+    authorSub?: Subscription;
+    author: UserData = {} as UserData;
     // Opciones de categoría
     formControl = new FormControl('');
 
-    categoryList: string[] = ['repostería', 'invierno', 'verano', 'comidas', 'cenas', 'desayunos', 'meriendas'];
+    categoryList: string[] = ['repostería', 'invierno', 'verano', 'comidas', 'cenas', 'desayunos', 'meriendas','salsas', 'entremeses',];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any, 
+        private authService: AuthService,
         private postsService: PostsService,
         public dialogRef: MatDialogRef<PostCreateComponent>) {
             this.editing = data.editing; 
@@ -48,32 +54,24 @@ export class PostCreateComponent {
                 this.myPost = data.post;
             } else {
                 this.myPost = {
-                    _id: '',
-                    title: '',
-                    subtitle: '',
-                    description: '',
-                    content: '',
-                    items: [],
-                    steps: [],
-                    tags: [],
-                    url: '',
-                    imgUrl: '',
-                    attachedFile: '',
-                    category: [],
-                    date: '',
-                    price: 0,
-                    status: 'draft',
-                    views: 0,
-                    likes: 0,
-                    comments: [],
+                    _id: '', title: '',
+                    description: '', content: '',
+                    items: [], steps: [], url: '',
+                    imgUrl: '', category: [],
+                    date: '', status: 'draft', author: ''
             }
-            
-            console.log('Editing:', this.editing);
             console.log('Post:', this.myPost);
       }}
 
+    ngOnInit() {
+        this.authorSub = this.authService
+            .getUserStatus()
+            .subscribe(user => {
+                this.author = user;
+                this.myPost.author = this.author._id;
+        });
+    }
 
-  
     // Método para agregar un nuevo post
     onAddPost(form: NgForm) {
         if (form.invalid) return;

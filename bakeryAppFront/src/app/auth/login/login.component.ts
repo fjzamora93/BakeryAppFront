@@ -28,7 +28,6 @@ export class LoginComponent {
   ) {}
 
   ngOnInit() {
-    // Suscribirse al estado de autenticación
     this.authListenerSubs = this.authService
         .getIsAuth()
         .subscribe(isAuth => {

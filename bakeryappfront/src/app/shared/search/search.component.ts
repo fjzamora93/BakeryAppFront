@@ -27,11 +27,17 @@ import { PostsService } from '../../posts/posts.service';
     @Output() filteredPosts = new EventEmitter<Post[]>();
     myControl = new FormControl('');
     posts: Post[] = [];
+    postsSub: Subscription = new Subscription();
   
     constructor(public postsService: PostsService) {}
 
     ngOnInit() {
-        this.posts = this.postsService.getAllPosts();
+        this.postsSub = this.postsService
+            .getPostUpdateListener()
+            .subscribe((posts: Post[]) => {
+            this.posts = posts;
+        });
+     
     }
 
     onInputChange(value: any) {

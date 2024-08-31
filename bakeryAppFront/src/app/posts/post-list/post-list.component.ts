@@ -35,13 +35,15 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     ]
 })
 export class PostListComponent implements OnInit, OnDestroy {
-    @Output() postSelected = new EventEmitter<Post>();
+   
     posts: Post[] = [];
     slicedPosts : Post[] = [];
     myControl = new FormControl('');
     private postsSub?: Subscription;
     filteredPosts$?: Observable<Post[]>;
     editing: boolean = false;
+
+    postDetailsSub?: Subscription;  
     myPost!: Post;
     postsFiltered: Post[] = [];
 
@@ -54,9 +56,14 @@ export class PostListComponent implements OnInit, OnDestroy {
                 this.posts = posts;
                 this.slicedPosts = this.posts;
         });
+
+        this.postDetailsSub = this.postsService
+            .getSelectedPost()
+            .subscribe(post => {
+                this.myPost = post!;
+        });
+
     }   
-
-
 
     ngOnDestroy() {
         this.postsSub?.unsubscribe();
@@ -64,7 +71,9 @@ export class PostListComponent implements OnInit, OnDestroy {
 
 
     onSelectingPost(post: Post) {
-        this.postSelected.emit(post);
+        console.log('Post selected:', post);
+        this.postsService.setSelectedPost(post);
+        this.postsService.setIsAuthored(post.author);
     }
 
     

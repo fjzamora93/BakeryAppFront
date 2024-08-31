@@ -15,7 +15,8 @@ export class CsrfService {
   // Obtiene el token CSRF del servidor
   getCsrfToken(): Observable<string> {
     console.log('Fetching CSRF token...', this.apiUrl);
-    return this.http.get<{ csrfToken: string }>(`${this.apiUrl}/csrf-token`, { withCredentials: true }).pipe(
+    const url = `${this.apiUrl}/csrf-token?_=${new Date().getTime()}`;
+    return this.http.get<{ csrfToken: string }>(url, { withCredentials: true }).pipe(
       tap(response => {
         this.csrfToken = response.csrfToken;
         console.log('CSRF Token received:', this.csrfToken, '=>', response, this.apiUrl);

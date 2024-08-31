@@ -10,6 +10,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TagsComponent } from './tags/tags.component';
 import { AuthService } from '../../auth/auth.service';
 import { UserData } from '../../auth/user-data.model';
+import { PostsService } from '../posts.service';
 
 @Component({
   selector: 'app-post-details',
@@ -19,23 +20,28 @@ import { UserData } from '../../auth/user-data.model';
   styleUrl: './post-details.component.css'
 })
 export class PostDetailsComponent implements OnInit  {
-    @Input() postDetails?: Post ;
+    postDetails?: Post | null;
     @Input() isEditing: boolean = false;
     @Output() isEditingChange = new EventEmitter<boolean>();
 
+    private postDetailStatusSub?: Subscription;
     private authStatusSub?: Subscription;
-    public isLogedIn: boolean = false;
-
     private userStatusSub?: Subscription;
+    private isAuthoredSub?: Subscription;
 
+    public isLogedIn: boolean = false;
+    public isAuthor: boolean = false;
     //! CUIDADO, la lógica está planteada para que siempre haya un usuario VACÍO (aunque no esté registrado)
     public user?: UserData; 
 
-    public isAuthor: boolean = false;
+    
+
+    
 
     content: string[]  = ['Formateo el contenido del post'];
   
     constructor(
+        private postsService: PostsService,
         public dialog: MatDialog, 
         private snackBar: MatSnackBar,
         private authService: AuthService
@@ -53,22 +59,24 @@ export class PostDetailsComponent implements OnInit  {
             .subscribe(
                 user => {
                     this.user = user;
-                    if (this.user && this.postDetails) {
-                        this.isAuthor = this.user._id === this.postDetails.author;
-                    }
             });
+
+        this.postDetailStatusSub = this.postsService
+            .getSelectedPost()
+            .subscribe(
+                post => {
+                    this.postDetails = post;
+                }
+            )
+        this.isAuthoredSub = this.postsService
+            .getIsAuthored()
+            .subscribe(
+                isAuthor => {
+                    if (this.isLogedIn) this.isAuthor = isAuthor;
+                }
+            )
     }
 
-
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['postDetails'] && changes['postDetails'].currentValue) {
-            if (changes['postDetails'].currentValue.content) {
-                this.content = changes['postDetails'].currentValue.content.split('\n');
-            } 
-            this.isAuthor = this.user?._id === this.postDetails?.author;
-        }
-      }
 
     openOverlay() {
         this.dialog.open(PostCreateComponent, {
@@ -94,7 +102,8 @@ export class PostDetailsComponent implements OnInit  {
       }
 
      changingPost(post: Post){
-        this.postDetails = post;
+        this.postsService.setSelectedPost(post);
+        this.postsService.setIsAuthored(this.postDetails!.author);
      }
 
 }

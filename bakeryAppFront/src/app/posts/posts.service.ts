@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject, from, of, map } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, last, switchMap, tap } from 'rxjs/operators';
 import { Post } from './post.model';
 import { CsrfService } from '../csrf.service';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../auth/auth.service';
+import { UserData } from '../auth/user-data.model';
 
 @Injectable({ providedIn: 'root' })
 export class PostsService {
@@ -13,13 +15,38 @@ export class PostsService {
     private apiUrl = environment.apiUrl + '/posts';
     private posts: Post[] = [];
     private postsUpdated = new Subject<Post[]>();
-    public postSelected?: Post;
-    private newPosts: Post[] = [];
-    constructor(private http: HttpClient, private csrfService: CsrfService) {}
+    private selectedPost = new BehaviorSubject<Post | null>(null);
+    private isAuthered = new BehaviorSubject<boolean>(false);
+    private user?: UserData;
 
-    getAllPosts(): Post[] {
-        return this.posts;
+    /** @deprecated */
+    public postSelected?: Post;
+
+    constructor(
+        private http: HttpClient, 
+        private csrfService: CsrfService,
+        private authService: AuthService
+    ) {
+        this.authService.getUserStatus().subscribe(user => {
+            this.user = user;
+        });
+
+        this.getPostUpdateListener().subscribe(posts => {
+            this.posts = posts;
+            this.setSelectedPost(this.posts[this.posts.length - 1]);
+        });
+        
     }
+
+    // Método para obtener un post seleccionado
+    getSelectedPost(): Observable<Post | null> {
+        return this.selectedPost.asObservable();
+    }
+
+    setSelectedPost(post: Post | null): void {
+        this.selectedPost.next(post);
+    }
+
 
     getPostFilteredByString(searchString: string) {
         return this.posts.filter(post => post.title.toLowerCase().includes(searchString.toLowerCase()));
@@ -39,8 +66,6 @@ export class PostsService {
                 tap(postData => {
                     this.posts = postData.posts;
                     this.postsUpdated.next([...this.posts]);
-                    const randomIndex = Math.floor(Math.random() * this.posts.length);
-                    this.postSelected = this.posts[randomIndex];
                 }),
                 catchError(error => {
                     console.error('Error fetching posts:', error);
@@ -65,6 +90,7 @@ export class PostsService {
         formData.append('content', post.content || '');
         formData.append('status', post.status || '1');
         formData.append('date', post.date || '30 minutos');
+        formData.append('author', post.author || '');
         // Enviar cada elemento de 'items', 'categoria' y 'steps' individualmente
         if (post.category) {
             post.category.forEach((cat, index) => {
@@ -102,25 +128,7 @@ export class PostsService {
         );
     }
 
-    addPost(post: Post): Observable<any> {
-        this.newPosts.push(post); 
-        return this.csrfService.getHeaders().pipe(
-            switchMap(headers => {
-                const body = post;
-                return this.http.post<Post>(
-                    this.apiUrl, 
-                    body, 
-                    { headers, withCredentials: true }
-                ).pipe(
-                catchError(error => {
-                    console.error('Error adding post:', error);
-                    return of(error);
-                })
-                );
-            })
-        );
-    }
-
+    // Método para borrar un post
     deletePost(postId: string): Observable<any> {
         return this.csrfService.getHeaders().pipe(
             switchMap(headers => {
@@ -147,7 +155,7 @@ export class PostsService {
         formData.append('content', post.content || '');
         formData.append('status', post.status || '1');
         formData.append('date', post.date || '30 minutos');
-
+      
         // Enviar cada elemento de 'items', 'categoria' y 'steps' individualmente
 
         if (post.category) {
@@ -191,12 +199,24 @@ export class PostsService {
         );
     }
     
-    
-    /**
+    getIsAuthored(): Observable<boolean> {
+        return this.isAuthered.asObservable();
+    }
+
+    setIsAuthored(postId: string = '' ): void {
+        if (!this.user || !postId) {
+            this.isAuthered.next(false);
+            return;
+        }
+        const isAuth = this.user._id === postId;
+        this.isAuthered.next(isAuth);
+    }
+
+     /**
      * @deprecated
      * Este método envía un JSON en lugar de un FormData, lo que impide el manejo de archivos e imágenes.
      */
-    updatePostJSON(post: Post): Observable<any> {
+     updatePostJSON(post: Post): Observable<any> {
         return this.csrfService.getHeaders().pipe(
             switchMap(headers => {
                 console.log('Intentando actualizar en el front:', post);
