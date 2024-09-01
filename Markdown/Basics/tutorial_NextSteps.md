@@ -8,14 +8,6 @@
 **SGA:** Las aplicaciones de una sola página (SPA) cargan una sola página HTML y actualizan dinámicamente el contenido sin recargar la página completa.
 Estos conceptos son importantes para entender las estrategias de renderizado y cómo afectan el rendimiento y la SEO de la aplicación, pero pueden ser considerados en etapas posteriores del aprendizaje.
 
-## 1. Services & Dependency Injection
-**Importancia**: Muy alta
-**Descripción:** Los servicios en Angular son una manera de compartir datos y lógica entre diferentes componentes. La inyección de dependencias (Dependency Injection, DI) es un patrón de diseño utilizado para implementar la inversa de control (IoC), permitiendo que las clases declaren sus dependencias que serán inyectadas en tiempo de ejecución. Este concepto es fundamental para escribir código modular, reutilizable y testable.
-
-
-##  2. RxJS - observables
-**Importancia:** Muy alta
-**Descripción:** RxJS (Reactive Extensions for JavaScript) proporciona herramientas para trabajar con flujos de datos asincrónicos y eventos, utilizando Observables. En Angular, RxJS es fundamental para manejar operaciones asíncronas como eventos de usuario, peticiones HTTP y temporizadores. Comprender RxJS es esencial para manejar correctamente la programación reactiva en Angular.
 
 ## 3. HTTP Request & handeling responses
 **Importancia:** Alta
