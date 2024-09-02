@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Post } from '../post.model';
-import { Subscription } from 'rxjs';
+import { Subscription, catchError, of, tap } from 'rxjs';
 import { MatCardModule, MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
@@ -90,6 +90,24 @@ export class PostDetailsComponent implements OnInit  {
           },
         });
     }
+
+
+    addToFavorites(){
+        this.authService
+            .addToBookmark(this.postDetails!._id)
+            .pipe(
+                tap(response => {
+                    console.log('Post added to favorites:', response);
+                }),
+                catchError(error => {
+                    console.error('Error adding post to favorites:', error);
+                    return of(null);
+                })
+            ).subscribe();
+        this.showMessage();
+    }
+
+
 
     showMessage() {
         this.snackBar.open('¡Añadido a favoritos!', 'Ok', {

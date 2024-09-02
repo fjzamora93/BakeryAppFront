@@ -15,6 +15,7 @@ import { PostsService } from './posts.service';
 export class PostBodyComponent {
     
     postSelected?: Post;
+    posts: Post[] = [];
     isEditing : boolean = false;
 
     constructor( public postsService: PostsService){}
@@ -24,6 +25,7 @@ export class PostBodyComponent {
             .subscribe((posts: Post[]) => {
                 console.log('Posts fetched:', posts);
                 const randomIndex = Math.floor(Math.random() * posts.length);
+                this.posts = posts;
                 this.postSelected = posts[randomIndex];
             });    
     }

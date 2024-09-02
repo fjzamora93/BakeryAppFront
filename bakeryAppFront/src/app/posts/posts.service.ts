@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, from, of, map } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, from, of, map, throwError } from 'rxjs';
 import { catchError, last, switchMap, tap } from 'rxjs/operators';
 import { Post } from './post.model';
 import { CsrfService } from '../csrf.service';
@@ -14,6 +14,7 @@ export class PostsService {
     //TODO CAMBIAR URL DE LA API
     private apiUrl = environment.apiUrl + '/posts';
     private posts: Post[] = [];
+
     private postsUpdated = new Subject<Post[]>();
     private selectedPost = new BehaviorSubject<Post | null>(null);
     private isAuthered = new BehaviorSubject<boolean>(false);
@@ -57,6 +58,17 @@ export class PostsService {
         return this.posts.filter(post => post.category!.includes(category));
     }
 
+    getPostsByAuthor(author: string): Post[] {
+        return this.posts.filter(post => post.author === author);
+    }
+
+    getPostsByBookmarked(bookmark: string[]): Post[] {
+        console.log('LOS POSTS DE LOS QUE PARTIMOS:', this.posts);
+        let postsFiltered = this.posts.filter(post => bookmark.includes(post._id));
+        console.log('Bookmarks:', bookmark, 'Filtro: ', postsFiltered);
+
+        return postsFiltered;
+    }
 
     // Método para obtener posts
     getPosts(): void {
@@ -263,6 +275,28 @@ export class PostsService {
         });
     }
 
+
+    addToBookmark(postId: string, userId: string) {
+        const body = { postId, userId};
+        console.log("Adding bookmark", this.apiUrl);
+        return this.csrfService.getHeaders().pipe(
+            switchMap(headers => {
+                return this.http.post(
+                    `${this.apiUrl}/bookmark`, 
+                    body , 
+                    { headers, withCredentials: true }
+                ).pipe(
+                tap(response => {
+                    console.log('Bookmark Response:', body,  response);
+                }),
+                catchError(error => {
+                    console.error('Error adding bookmark:', error);
+                    return throwError(() => new Error('An unknown error occurred'));
+                })
+                );
+            })
+        );
+    }
 }
 
 

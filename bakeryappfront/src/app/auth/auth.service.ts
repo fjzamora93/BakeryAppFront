@@ -88,7 +88,7 @@ export class AuthService {
         this.router.navigate(["/"]);
     }
     
-    //TODO: MÉTODOS SIN IMPLMENTAR AÚN
+    
     createUser(user: UserData,  password: string) {
         const userSignUp: any = { user: user, password: password };
         console.log("Registrando usuario", userSignUp.user, userSignUp.password);
@@ -112,7 +112,30 @@ export class AuthService {
         
     }
 
+    addToBookmark(postId: string) {
+        
+        const body = { postId, userId: this.userStatusListener.value._id };
+        console.log("Adding bookmark", this.apiUrl);
+        return this.csrfService.getHeaders().pipe(
+            switchMap(headers => {
+                return this.http.post(
+                    `${this.apiUrl}/bookmark`, 
+                    body , 
+                    { headers, withCredentials: true }
+                ).pipe(
+                tap(response => {
+                    console.log('Bookmark Response:', body,  response);
+                }),
+                catchError(error => {
+                    console.error('Error adding bookmark:', error);
+                    return throwError(() => new Error('An unknown error occurred'));
+                })
+                );
+            })
+        );
+    }
 
+    //TODO: MÉTODOS SIN IMPLMENTAR AÚN
     autoAuthUser() {
         const authInformation = this.getAuthData();
         if (!authInformation) {

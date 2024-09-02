@@ -28,5 +28,18 @@
             <li>{{ post.title }}</li>
         }
     </ul>
+    <button mat-raised-button color="accent" (click)="onSelectingAuthored()">
+        Mis recetas
+    </button>
+    
+    <button mat-raised-button color="accent" (click)="onSelectingBookmarks()">
+        Recetas archivadas
+    </button>
 </section>
 
+
+
+
+<app-post-list [posts]="posts"/>
+
+<app-post-details />

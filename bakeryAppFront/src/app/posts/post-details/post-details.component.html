@@ -1,4 +1,5 @@
 
+
 <section>
     @if (postDetails) {
 
@@ -11,7 +12,7 @@
                 
                 <mat-card-title id="title">
                     @if (isLogedIn){
-                        <button mat-fab (click)="showMessage()" class="button-like">
+                        <button mat-fab (click)="addToFavorites()" class="button-like">
                             <mat-icon>favorite</mat-icon>
                         </button>
                     }
@@ -71,19 +72,6 @@
         
     }
 
-    <div style="text-align:center; max-width: 300px; display:inline; background-color: brown; opacity: 0.7;">
-        <h3>Testing datos de autoentificación</h3>
-        <h4> Autoría del post: {{ isAuthor }}</h4>
-        @if (user){
-            <p>Id: {{ user._id }}</p>
-            <p>Nombre: {{ user.name }}</p>
-            <p>Email: {{ user.email }}</p>
-            <p>Bookmark: {{user.bookmark }}</p>
-            <p>Posts creados: {{ user.posts }}</p>
-
-        } @else {
-            <p> No hay usuario registrado {{ user }}</p>
-        }  
-    </div>
+    
 </section>
 

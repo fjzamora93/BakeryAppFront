@@ -13,12 +13,16 @@ import { TagsComponent } from '../../posts/post-details/tags/tags.component';
 import { PostCreateComponent } from '../../posts/post-create/post-create.component';
 import { Post } from '../../posts/post.model';
 import { PostsService } from '../../posts/posts.service';
+import { PostDetailsComponent } from "../../posts/post-details/post-details.component";
+import { PostListComponent } from '../../posts/post-list/post-list.component';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [MatCardModule, MatCard, MatIcon, PostCreateComponent, MatDivider, MatSnackBarModule, TagsComponent],
+  imports: [MatCardModule, MatCard, MatIcon, MatButtonModule,
+    PostCreateComponent, MatDivider, MatSnackBarModule, TagsComponent, PostDetailsComponent, PostListComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -85,9 +89,12 @@ export class ProfileComponent implements OnInit  {
         });
     }
 
-    ngAfterViewInit(): void {
-        console.log("Imprimiendo posts", this.posts);
-        
+    onSelectingBookmarks(){
+        this.posts = this.bookmarks;
+    }
+
+    onSelectingAuthored(){
+        this.posts = this.authoredPosts;
     }
             
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, Input } from '@angular/core';
 import { Subscription, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -34,41 +34,31 @@ import {MatFormFieldModule} from '@angular/material/form-field';
         AsyncPipe,
     ]
 })
-export class PostListComponent implements OnInit, OnDestroy {
+export class PostListComponent implements OnInit {
    
-    posts: Post[] = [];
+    @Input() posts: Post[] = [];
+    
     slicedPosts : Post[] = [];
     myControl = new FormControl('');
-    private postsSub?: Subscription;
+
     filteredPosts$?: Observable<Post[]>;
     editing: boolean = false;
 
-    postDetailsSub?: Subscription;  
+
     myPost!: Post;
     postsFiltered: Post[] = [];
 
-    constructor(public postsService: PostsService) {}
+    constructor(public postsService: PostsService) {
+        
+    }
 
     ngOnInit() {
         this.postsService.getPosts();
-        this.postsSub = this.postsService.getPostUpdateListener()
-            .subscribe((posts: Post[]) => {
-                this.posts = posts;
-                this.slicedPosts = this.posts;
-        });
-
-        this.postDetailsSub = this.postsService
-            .getSelectedPost()
-            .subscribe(post => {
-                this.myPost = post!;
-        });
-
     }   
 
-    ngOnDestroy() {
-        this.postsSub?.unsubscribe();
+    ngOnChanges(SimpleChanges: any) {
+        this.slicedPosts = this.posts.slice(0, 10);
     }
-
 
     onSelectingPost(post: Post) {
         console.log('Post selected:', post);
