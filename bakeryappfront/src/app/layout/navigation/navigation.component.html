@@ -19,9 +19,15 @@
         </button>
         <!-- Cambia el enlace a usar routerLink -->
         @if (isAuth){
-            
+            <button mat-fab  [routerLink]="'/bookmark'"  class="menu-item">
+                <mat-icon>bookmark</mat-icon>
+            </button>
 
-            <button mat-fab  [routerLink]="'/signup'" style="background-color: brown;" class="menu-item" (click)="onLogOut()">
+            <button mat-fab  [routerLink]="'/profile'"  class="menu-item">
+                <mat-icon>person</mat-icon>
+            </button>
+
+            <button mat-fab  [routerLink]="'/logout'" style="background-color: brown;" class="menu-item" (click)="onLogOut()">
                 <mat-icon>logout</mat-icon>
             </button>
         }
@@ -30,6 +36,10 @@
         @if (!isAuth){
             <button mat-fab  [routerLink]="'/login'" class="menu-item" style="background-color: rgb(26, 116, 68);">
                 <mat-icon>login</mat-icon>
+            </button>
+
+            <button mat-fab  [routerLink]="'/signup'" class="menu-item" style="background-color: rgb(26, 116, 68);">
+                <mat-icon>person_add</mat-icon>
             </button>
 
         }

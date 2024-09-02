@@ -1,5 +1,10 @@
 <mat-card>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
+  
+  <h2> Iniciar sesión </h2>
+  <p> Recuerda que puedes iniciar la sesión con tu nombre de usuario o tu email. </p>
+
+
   <form (submit)="onLogin(loginForm)" #loginForm="ngForm" *ngIf="!isLoading">
     <mat-form-field>
       <input matInput name="email" ngModel type="text" placeholder="E-Mail" #emailInput="ngModel" required >

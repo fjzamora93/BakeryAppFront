@@ -1,13 +1,24 @@
 
 
+h2, h3, p {
+    text-align: center;
+}
+
+
 mat-form-field {
-  width: 100%;
-}
+    width: 100%;
+  }
+  
+  mat-spinner {
+    margin: auto;
+  }
+  
+  mat-card{
+      padding: 50px 30%;
+  }
 
-mat-spinner {
-  margin: auto;
-}
-
-mat-card{
-    padding: 10px 20%;
-}
+  @media screen and (max-width: 600px) {
+    mat-card{
+      padding: 10px 10px;
+    }
+  }

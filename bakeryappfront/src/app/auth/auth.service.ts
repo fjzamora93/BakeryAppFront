@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { BehaviorSubject, Observable, Subject, Subscription, catchError, of, switchMap, tap } from "rxjs";
+import { BehaviorSubject, Observable, Subject, Subscription, catchError, of, switchMap, tap, throwError } from "rxjs";
 import { authGuard } from "./auth.guard";
 import { AuthData } from "./auth-data.model";
 import { CsrfService } from "../csrf.service";
@@ -89,19 +89,22 @@ export class AuthService {
     }
     
     //TODO: MÉTODOS SIN IMPLMENTAR AÚN
-    createUser(email: string, password: string) {
-        const authData: AuthData = { email: email, password: password };
-        console.log("Registrando usuario", authData.email, authData.password);
+    createUser(user: UserData,  password: string) {
+        const userSignUp: any = { user: user, password: password };
+        console.log("Registrando usuario", userSignUp.user, userSignUp.password);
         return this.csrfService.getHeaders().pipe(
             switchMap(headers => {
                 return this.http.post(
                     `${this.apiUrl}/signup`, 
-                    authData, 
+                    userSignUp, 
                     { headers, withCredentials: true }
                 ).pipe(
                 catchError(error => {
                     console.error('Error adding user:', error);
-                    return of(error);
+                    if (error.status === 409) {
+                        return throwError(() => new Error('User already exists'));
+                      }
+                      return throwError(() => new Error('An unknown error occurred'));
                 })
                 );
             })

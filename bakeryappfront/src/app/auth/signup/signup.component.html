@@ -1,14 +1,53 @@
 <mat-card>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
+  
+
   <form (submit)="onSignup(signupForm)" #signupForm="ngForm" *ngIf="!isLoading">
+
+    <!--- MENSAJES DE ERROR QUE LLEGUEN DESDE EL BACKEND --->
+    @if (signupErrorMessage){
+        <div class="error-message">
+            {{ signupErrorMessage }}
+        </div>
+    } @else {}
+    <div >
+        <h2> ¿Nuevo usuario? </h2>
+        <p> Solamente necesitas insertar un nombre de usuario, un email y una contraseña. No pediremos nada más. </p>
+    </div>
+
     <mat-form-field>
-      <input matInput name="email" ngModel type="text" placeholder="E-Mail" #emailInput="ngModel" required >
+      <input matInput name="email" [(ngModel)]="newUser!.email" 
+      type="text" placeholder="E-Mail" 
+      #emailInput="ngModel" required >
       <mat-error *ngIf="emailInput.invalid">Please enter a valid email.</mat-error>
     </mat-form-field>
+
     <mat-form-field>
-      <input type="password" name="password" ngModel matInput placeholder="Password" #passwordInput="ngModel" required>
-      <mat-error *ngIf="passwordInput.invalid">Please enter a valid password.</mat-error>
+        <input matInput name="name" [(ngModel)]="newUser!.name" 
+        type="text" placeholder="Nombre de usuario" 
+        #nameInput="ngModel" required >
+        <mat-error *ngIf="emailInput.invalid">Please enter a valid email.</mat-error>
     </mat-form-field>
-    <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">Signup</button>
+    
+
+    <mat-form-field>
+      <input type="password" name="password" [(ngModel)]="password"
+      matInput placeholder="Contraseña" 
+      #passwordInput="ngModel" required>
+      <mat-error *ngIf="passwordInput.invalid">Introduzca una contraseña válida.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="password" name="repeat-password" [(ngModel)]="repeatPassword" 
+        matInput placeholder="Repite la contraseña" 
+        #repeatPasswordInput="ngModel" required>
+        
+        @if (password !== repeatPassword){
+            <mat-error>Las contraseñas no coinciden</mat-error>
+        }
+
+    </mat-form-field>
+
+    <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">Registrarse</button>
   </form>
 </mat-card>

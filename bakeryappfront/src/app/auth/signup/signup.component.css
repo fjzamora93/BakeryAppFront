@@ -1,7 +1,24 @@
-mat-form-field {
-  width: 100%;
+
+
+h2, h3, p {
+    text-align: center;
 }
 
-mat-spinner {
-  margin: auto;
-}
+
+mat-form-field {
+    width: 100%;
+  }
+  
+  mat-spinner {
+    margin: auto;
+  }
+  
+  mat-card{
+      padding: 50px 30%;
+  }
+
+  @media screen and (max-width: 600px) {
+    mat-card{
+      padding: 10px 10px;
+    }
+  }

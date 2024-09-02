@@ -63,6 +63,14 @@ button[mat-fab] mat-icon {
     margin: auto!important;
 }
 
+.error-message{
+    color: red;
+    text-align: center;
+    padding: 30px;
+    font-size: 1.2em;
+    border: 1px solid red;
+    margin: 10px;
+}
 
 .mobile-view{
     display:none

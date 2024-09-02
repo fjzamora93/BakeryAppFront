@@ -9,11 +9,12 @@ import { MatSpinner } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { Subscription, catchError, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatCard, MatFormField, MatSpinner, MatError, MatInputModule],  // Importa módulos necesarios
+  imports: [CommonModule, FormsModule, MatCard, MatFormField, MatSpinner, MatError, MatInputModule, MatButtonModule],  // Importa módulos necesarios
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
