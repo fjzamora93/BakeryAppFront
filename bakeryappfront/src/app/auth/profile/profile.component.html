@@ -1,0 +1,32 @@
+
+
+<section>
+    <mat-card>
+        <mat-card-header>
+            <h2 id="title">Nombre: {{ user!.name }}</h2>
+            <br><p>Id: {{ user!._id }}</p>
+        </mat-card-header>
+
+        <mat-card-content>
+            <p style="color:white"><p>{{ user!._id }}</p>
+            <p>Email: {{ user!.email }}</p>
+        </mat-card-content>
+    </mat-card>
+
+
+
+    <h2> Posts creados </h2>
+    <ul>
+        @for (post of authoredPosts; track post){
+            <li>{{ post.title }}</li>
+        }
+    </ul>
+    
+    <h2> Posts guardados </h2>
+    <ul>
+        @for (post of bookmarks; track post){
+            <li>{{ post.title }}</li>
+        }
+    </ul>
+</section>
+

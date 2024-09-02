@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { BehaviorSubject, Observable, Subject, Subscription, catchError, of, switchMap, tap, throwError } from "rxjs";
-import { authGuard } from "./auth.guard";
+
 import { AuthData } from "./auth-data.model";
 import { CsrfService } from "../csrf.service";
 import { environment } from "../../environments/environment";
