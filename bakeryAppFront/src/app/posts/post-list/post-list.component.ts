@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, Input, SimpleChanges } from '@angular/core';
 import { Subscription, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -35,7 +35,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     ]
 })
 export class PostListComponent implements OnInit {
-   
+    
     @Input() posts: Post[] = [];
     
     slicedPosts : Post[] = [];
@@ -56,8 +56,15 @@ export class PostListComponent implements OnInit {
         this.postsService.getPosts();
     }   
 
-    ngOnChanges(SimpleChanges: any) {
-        this.slicedPosts = this.posts.slice(0, 10);
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['posts']) {
+            console.log('posts ha cambiado');
+            console.log('Valor anterior:', changes['posts'].previousValue);
+            console.log('Valor actual:', changes['posts'].currentValue);
+            this.posts = changes['posts'].currentValue;
+            this.slicedPosts = this.posts.slice(0, 10);
+            
+        }
     }
 
     onSelectingPost(post: Post) {

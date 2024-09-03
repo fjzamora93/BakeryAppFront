@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PostCreateComponent } from '../post-create/post-create.component';
 import { MatDivider } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { TagsComponent } from './tags/tags.component';
+import { TagsComponent } from '../tags/tags.component';
 import { AuthService } from '../../auth/auth.service';
 import { UserData } from '../../auth/user-data.model';
 import { PostsService } from '../posts.service';
@@ -20,7 +20,7 @@ import { PostsService } from '../posts.service';
   styleUrl: './post-details.component.css'
 })
 export class PostDetailsComponent implements OnInit  {
-    postDetails?: Post | null;
+    @Input() postDetails?: Post | null;
     @Input() isEditing: boolean = false;
     @Output() isEditingChange = new EventEmitter<boolean>();
 
@@ -35,9 +35,6 @@ export class PostDetailsComponent implements OnInit  {
     public user?: UserData; 
 
     
-
-    
-
     content: string[]  = ['Formateo el contenido del post'];
   
     constructor(
@@ -61,13 +58,6 @@ export class PostDetailsComponent implements OnInit  {
                     this.user = user;
             });
 
-        this.postDetailStatusSub = this.postsService
-            .getSelectedPost()
-            .subscribe(
-                post => {
-                    this.postDetails = post;
-                }
-            )
         this.isAuthoredSub = this.postsService
             .getIsAuthored()
             .subscribe(
@@ -119,9 +109,5 @@ export class PostDetailsComponent implements OnInit  {
         
       }
 
-     changingPost(post: Post){
-        this.postsService.setSelectedPost(post);
-        this.postsService.setIsAuthored(this.postDetails!.author);
-     }
 
 }

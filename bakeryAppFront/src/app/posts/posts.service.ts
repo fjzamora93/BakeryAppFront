@@ -14,8 +14,10 @@ export class PostsService {
     //TODO CAMBIAR URL DE LA API
     private apiUrl = environment.apiUrl + '/posts';
     private posts: Post[] = [];
-
     private postsUpdated = new Subject<Post[]>();
+    private filteredPosts = new Subject<Post[]>();
+    private filteredPostsValue: Post[] = [];
+
     private selectedPost = new BehaviorSubject<Post | null>(null);
     private isAuthered = new BehaviorSubject<boolean>(false);
     private user?: UserData;
@@ -48,7 +50,39 @@ export class PostsService {
         this.selectedPost.next(post);
     }
 
+    getFilteredPosts(filter: string = '', searchString:string = ''): Post[] {
 
+        switch (filter) {
+            case 'bookmarked':
+                this.filteredPostsValue = this.posts.filter(post => this.user!.bookmark.includes(post._id));
+                this.setSelectedPost(this.filteredPostsValue [0]);
+                return this.filteredPostsValue ;
+            case 'authored':
+                this.filteredPostsValue  = this.posts.filter(post => post.author === this.user!._id);
+                this.setSelectedPost(this.filteredPostsValue [0]);
+                return this.filteredPostsValue ;
+            //TODO: EXPERIMENTAL EL FILTRO DE BÚSQUEDA
+            case 'searchbar':
+                let searchResult = this.filteredPostsValue.filter(post => post.title.toLowerCase().includes(searchString.toLowerCase()));
+                return searchResult ;
+            default:
+                return this.posts;
+        }
+    }
+
+    setFilteredPosts(filter: string = '', searchString:string = ''): void {
+      
+        let filteredPosts = this.getFilteredPosts(filter, searchString);
+        console.log('Filtrando:', filter, filteredPosts);
+        this.filteredPosts.next([...filteredPosts]);
+        
+    }
+
+    getFilteredPostUpdateListener(): Observable<Post[]> {
+        return this.filteredPosts.asObservable();
+    }
+
+    //TODO: EL BUSCADOR BUSCA EN LA LISTA GENÉRICA, NO EN LAS LISTAS FILTRADAS
     getPostFilteredByString(searchString: string) {
         return this.posts.filter(post => post.title.toLowerCase().includes(searchString.toLowerCase()));
       }
@@ -58,26 +92,16 @@ export class PostsService {
         return this.posts.filter(post => post.category!.includes(category));
     }
 
-    getPostsByAuthor(author: string): Post[] {
-        return this.posts.filter(post => post.author === author);
-    }
-
-    getPostsByBookmarked(bookmark: string[]): Post[] {
-        console.log('LOS POSTS DE LOS QUE PARTIMOS:', this.posts);
-        let postsFiltered = this.posts.filter(post => bookmark.includes(post._id));
-        console.log('Bookmarks:', bookmark, 'Filtro: ', postsFiltered);
-
-        return postsFiltered;
-    }
-
+    
     // Método para obtener posts
     getPosts(): void {
-        console.log('Api URL:', this.apiUrl);
         this.http.get<{ message: string; posts: Post[] }>(this.apiUrl, { withCredentials: true })
             .pipe(
                 tap(postData => {
                     this.posts = postData.posts;
+                    this.filteredPostsValue = this.posts;
                     this.postsUpdated.next([...this.posts]);
+                    this.filteredPosts.next([...this.posts]);
                 }),
                 catchError(error => {
                     console.error('Error fetching posts:', error);
