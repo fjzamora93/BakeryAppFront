@@ -50,31 +50,29 @@ export class PostsService {
         this.selectedPost.next(post);
     }
 
-    getFilteredPosts(filter: string = '', searchString:string = ''): Post[] {
 
+    setFilteredPosts(filter: string = '', searchString:string = '', resetSearchBar:boolean= false) {
         switch (filter) {
             case 'bookmarked':
                 this.filteredPostsValue = this.posts.filter(post => this.user!.bookmark.includes(post._id));
                 this.setSelectedPost(this.filteredPostsValue [0]);
+                this.filteredPosts.next([...this.filteredPostsValue]);
                 return this.filteredPostsValue ;
             case 'authored':
                 this.filteredPostsValue  = this.posts.filter(post => post.author === this.user!._id);
                 this.setSelectedPost(this.filteredPostsValue [0]);
+                this.filteredPosts.next([...this.filteredPostsValue]);
                 return this.filteredPostsValue ;
-            //TODO: EXPERIMENTAL EL FILTRO DE BÚSQUEDA
             case 'searchbar':
+                if (resetSearchBar){
+                    this.filteredPostsValue = this.posts;
+                }
                 let searchResult = this.filteredPostsValue.filter(post => post.title.toLowerCase().includes(searchString.toLowerCase()));
+                this.filteredPosts.next([...searchResult]);
                 return searchResult ;
             default:
                 return this.posts;
         }
-    }
-
-    setFilteredPosts(filter: string = '', searchString:string = ''): void {
-      
-        let filteredPosts = this.getFilteredPosts(filter, searchString);
-        console.log('Filtrando:', filter, filteredPosts);
-        this.filteredPosts.next([...filteredPosts]);
         
     }
 

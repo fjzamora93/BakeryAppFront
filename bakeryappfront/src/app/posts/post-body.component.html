@@ -1,7 +1,7 @@
 
 <section>
     <div id="container">
-        <app-search (filteredPosts)="fetchFilteredPosts($event)" [searchAll]="false"/>
+        <app-search (filteredPosts)="fetchFilteredPosts($event)" [resetSearchBar]="true"/>
         <app-post-list [posts]="posts" />
     </div>
     

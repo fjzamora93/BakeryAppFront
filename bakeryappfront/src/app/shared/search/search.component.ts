@@ -24,7 +24,7 @@ import { PostsService } from '../../posts/posts.service';
     styleUrls: ['./search.component.css']  // Asegúrate de usar `styleUrls` en plural para un array.
   })
   export class SearchComponent  {
-    @Input() searchAll: boolean = false;
+    @Input() resetSearchBar: boolean = false; //En caso de que sea true, buscará en todos los posts
     @Output() filteredPosts = new EventEmitter<Post[]>();
     myControl = new FormControl('');
     posts: Post[] = [];
@@ -47,11 +47,14 @@ import { PostsService } from '../../posts/posts.service';
         //     filtrado = this.postsService.getPostFilteredByString(value.target.value);
 
         // } else {
-        this.postsService.setFilteredPosts('searchbar', value.target.value);
-        let filtrado = this.postsService.getFilteredPosts('searchbar', value.target.value)
-        console.log("Búsqueda: ", value.target.value, "Resultados: ", filtrado);
+        this.postsService.setFilteredPosts(
+            'searchbar', 
+            value.target.value, 
+            this.resetSearchBar
+        );
+
         
-        this.filteredPosts.emit(filtrado);
+        // this.filteredPosts.emit(filtrado);
 
     }
   

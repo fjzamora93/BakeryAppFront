@@ -6,10 +6,10 @@
 #container {
     float: right;
     width: 20vw;
-  margin: auto;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  margin: 20px;
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    margin: 20px;
 }
 
 @media (max-width: 768px) {
@@ -22,6 +22,11 @@
     app-search{
         display: block;
         margin: 10px 10%;
+    }
+
+    app-post-details{
+        clear:both;
+        display: block!important;
     }
   
   }

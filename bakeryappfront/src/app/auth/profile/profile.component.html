@@ -11,28 +11,34 @@
             Bienvenido a tu panel de usuario, aquí es donde puedes consultar tanto tus recetas creadas, 
             como las recetas que hayas archivado de otros usuarios.
         </mat-card-content>
+
+        <div class="button-panel">
+            <button mat-raised-button color="accent" (click)="onSelectingAuthored()">
+                <i class="material-icons">edit</i>
+                Mis recetas
+            </button>
+            
+            <button mat-raised-button color="accent" (click)="onSelectingBookmarks()">
+                <i class="material-icons">bookmarks</i>
+                Recetas archivadas 
+            </button>
+        </div>
     </mat-card>
 
-
-    <button mat-raised-button color="accent" (click)="onSelectingAuthored()">
-        Mis recetas
-    </button>
     
-    <button mat-raised-button color="accent" (click)="onSelectingBookmarks()">
-        Recetas archivadas
-    </button>
+    
 
     @if (searchFilter === 'authored'){
-        <h2> Mis recetas creadas</h2>
+        <h2>  Mis recetas creadas <i class="material-icons">edit</i></h2>
     } @else if (searchFilter === 'bookmarked'){
-        <h2> Recetas archivadas</h2>
+        <h2>  Recetas archivadas <i class="material-icons">bookmarks</i></h2>
     }
-    <app-search (filteredPosts)="searchBarFilter($event)" [searchAll]="false" />
+    <app-search  [resetSearchBar]="false" />
     
 </div>
 
 <div id="posts-body">
-    <app-post-list [posts]="posts" />
+    <app-post-list [posts]="posts" currentUrl="profile/"/>
     <app-post-details [postDetails]="postDetails"/>
 </div>
 

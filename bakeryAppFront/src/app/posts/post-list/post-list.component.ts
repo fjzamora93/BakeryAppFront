@@ -17,7 +17,8 @@ import {map, startWith} from 'rxjs/operators';
 import {AsyncPipe} from '@angular/common';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
+import { RouterLink } from '@angular/router';
+import {NgxPageScrollModule} from 'ngx-page-scroll';
 
 
 @Component({
@@ -25,18 +26,19 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     standalone: true,
     templateUrl: './post-list.component.html',
     styleUrls: ['./post-list.component.css'],
-    imports: [CommonModule, MaterialModule, PostCreateComponent, PaginatorComponent, SearchComponent,
+    imports: [CommonModule, MaterialModule, PostCreateComponent, PaginatorComponent, SearchComponent, NgxPageScrollModule,
         FormsModule,
         MatFormFieldModule,
         MatInputModule,
         MatAutocompleteModule,
         ReactiveFormsModule,
-        AsyncPipe,
+        AsyncPipe, RouterLink
     ]
 })
 export class PostListComponent implements OnInit {
     
     @Input() posts: Post[] = [];
+    @Input() currentUrl: string = '/';
     
     slicedPosts : Post[] = [];
     myControl = new FormControl('');

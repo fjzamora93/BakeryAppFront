@@ -42,7 +42,7 @@ export class ProfileComponent implements OnInit  {
 
     public searchFilter: string = 'authored';
 
-    content: string[]  = ['Formateo el contenido del post'];
+  
     
     public posts: Post[] = [];
     public bookmarks: Post[] = [];
@@ -87,12 +87,15 @@ export class ProfileComponent implements OnInit  {
         this.postsSub = this.postsService
             .getFilteredPostUpdateListener()
             .subscribe((posts: Post[]) => {
-                this.posts = this.postsService.getFilteredPosts(this.searchFilter);
-
+                this.posts = posts;
         });
     }
 
-
+    ngAfterViewInit(){
+        setTimeout(() => {
+        this.onSelectingAuthored();
+        }, 2000);
+    }
 
     onSelectingBookmarks(){
         this.searchFilter = 'bookmarked';
@@ -104,9 +107,6 @@ export class ProfileComponent implements OnInit  {
         this.postsService.setFilteredPosts(this.searchFilter);
     }
             
-    searchBarFilter(filteredPosts: Post[]){
-        this.posts = filteredPosts;
-    }
 
     showMessage() {
         this.snackBar.open('¡Añadido a favoritos!', 'Ok', {

@@ -17,21 +17,22 @@ import { SearchComponent } from '../shared/search/search.component';
 })
 export class PostBodyComponent {
     private postDetailStatusSub?: Subscription;
+    private postsSub?: Subscription;
     postDetails?: Post | null;
     posts: Post[] = [];
     isEditing : boolean = false;
+    
 
     constructor( public postsService: PostsService){}
 
     ngOnInit() {
         
-        this.postsService.getPostUpdateListener()
+        this.postsService.getPosts();
+        this.postsSub = this.postsService
+            .getFilteredPostUpdateListener()
             .subscribe((posts: Post[]) => {
-                console.log('Posts fetched:', posts);
-                const randomIndex = Math.floor(Math.random() * posts.length);
                 this.posts = posts;
-                this.postDetails = posts[randomIndex];
-            }); 
+        }); 
         this.postDetailStatusSub = this.postsService
             .getSelectedPost()
             .subscribe(
@@ -40,7 +41,7 @@ export class PostBodyComponent {
                 }
             )
         
-        this.postsService.setFilteredPosts() 
+        
     }
 
     ngOnDestroy() {

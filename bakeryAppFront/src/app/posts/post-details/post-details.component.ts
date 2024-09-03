@@ -35,7 +35,7 @@ export class PostDetailsComponent implements OnInit  {
     public user?: UserData; 
 
     
-    content: string[]  = ['Formateo el contenido del post'];
+    content: string[]  = [''];
   
     constructor(
         private postsService: PostsService,

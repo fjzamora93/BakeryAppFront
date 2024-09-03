@@ -11,7 +11,11 @@
             <mat-card-header>
                 
                 <mat-card-title id="title">
-                    @if (isLogedIn){
+                    @if (isLogedIn && user!.bookmark.includes(postDetails._id)){
+                        <button mat-fab (click)="addToFavorites()" class="button-like">
+                            <mat-icon>disabled_by_default</mat-icon>
+                        </button>
+                    } @else {
                         <button mat-fab (click)="addToFavorites()" class="button-like">
                             <mat-icon>favorite</mat-icon>
                         </button>
@@ -26,7 +30,7 @@
                    
                     <h1>{{ postDetails.title }}</h1>
                 </mat-card-title>
-                <mat-card-subtitle> Receta realiza por: {{ postDetails.author }}</mat-card-subtitle>
+                <!-- <mat-card-subtitle> Receta realiza por: {{ postDetails.author }} </mat-card-subtitle> -->
             </mat-card-header>
             
             <mat-card-content>
