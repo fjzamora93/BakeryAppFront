@@ -1,0 +1,51 @@
+:host{
+    margin-top: 20px;
+}
+
+mat-chip{
+    margin: 10px;
+}
+
+section{
+    padding: 20px 15% 20px;
+    max-width: 70%;
+    min-height: 500px;
+    
+}
+
+#resume-card{
+    max-width: 30%;
+    display: inline-block;
+    margin: 10px;
+    background-color: antiquewhite;
+}
+
+#resume-card mat-card-header mat-card-title{
+    
+    line-height: 1;
+}
+
+#resume-card img{
+    width: 100%;
+    max-height: 150px;
+    object-fit: cover;
+    overflow:hidden;
+    padding: 10px;
+}
+
+
+@media (max-width: 700px) {
+
+
+    :host{
+        display: block;
+    }
+    section{
+        max-width: 100%;
+        padding: 10px 10px;
+    }
+
+    mat-card{
+        padding: 0px;
+    }
+}

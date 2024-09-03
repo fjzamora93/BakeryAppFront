@@ -1,3 +1,12 @@
-<app-post-list [posts]="posts" />
 
-<app-post-details />
+<section>
+    <div id="container">
+        <app-search (filteredPosts)="fetchFilteredPosts($event)" [searchAll]="false"/>
+        <app-post-list [posts]="posts" />
+    </div>
+    
+    
+    <app-post-details [postDetails]="postDetails"/>
+
+    <app-tags [tagList]="postDetails!.category" />
+</section>

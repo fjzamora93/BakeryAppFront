@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatCardModule, MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
@@ -9,20 +9,21 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuthService } from '../../auth/auth.service';
 import { UserData } from '../../auth/user-data.model';
-import { TagsComponent } from '../../posts/post-details/tags/tags.component';
+import { TagsComponent } from '../../posts/tags/tags.component';
 import { PostCreateComponent } from '../../posts/post-create/post-create.component';
 import { Post } from '../../posts/post.model';
 import { PostsService } from '../../posts/posts.service';
 import { PostDetailsComponent } from "../../posts/post-details/post-details.component";
 import { PostListComponent } from '../../posts/post-list/post-list.component';
 import { MatButtonModule } from '@angular/material/button';
+import { SearchComponent } from "../../shared/search/search.component";
 
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [MatCardModule, MatCard, MatIcon, MatButtonModule,
-    PostCreateComponent, MatDivider, MatSnackBarModule, TagsComponent, PostDetailsComponent, PostListComponent],
+  imports: [MatCardModule, MatCard, MatIcon, MatButtonModule, SearchComponent,
+    PostCreateComponent, MatDivider, MatSnackBarModule, TagsComponent, PostDetailsComponent, PostListComponent, SearchComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -39,6 +40,8 @@ export class ProfileComponent implements OnInit  {
     public isAuthor: boolean = false;
     public user!: UserData; 
 
+    public searchFilter: string = 'authored';
+
     content: string[]  = ['Formateo el contenido del post'];
     
     public posts: Post[] = [];
@@ -46,6 +49,7 @@ export class ProfileComponent implements OnInit  {
     public authoredPosts: Post[] = [];
 
     constructor(
+        private cd: ChangeDetectorRef,
         private postsService: PostsService,
         private snackBar: MatSnackBar,
         private authService: AuthService
@@ -80,23 +84,29 @@ export class ProfileComponent implements OnInit  {
                 }
             )
         this.postsService.getPosts();
-        this.postsSub = this.postsService.getPostUpdateListener()
+        this.postsSub = this.postsService
+            .getFilteredPostUpdateListener()
             .subscribe((posts: Post[]) => {
-                this.posts = posts;
-                this.bookmarks = this.postsService.getPostsByBookmarked(this.user.bookmark);
-                this.authoredPosts = this.postsService.getPostsByAuthor(this.user._id);
-                
+                this.posts = this.postsService.getFilteredPosts(this.searchFilter);
+
         });
     }
 
+
+
     onSelectingBookmarks(){
-        this.posts = this.bookmarks;
+        this.searchFilter = 'bookmarked';
+        this.postsService.setFilteredPosts(this.searchFilter);
     }
 
     onSelectingAuthored(){
-        this.posts = this.authoredPosts;
+        this.searchFilter = 'authored';
+        this.postsService.setFilteredPosts(this.searchFilter);
     }
             
+    searchBarFilter(filteredPosts: Post[]){
+        this.posts = filteredPosts;
+    }
 
     showMessage() {
         this.snackBar.open('¡Añadido a favoritos!', 'Ok', {
@@ -112,5 +122,11 @@ export class ProfileComponent implements OnInit  {
         this.postsService.setSelectedPost(post);
         this.postsService.setIsAuthored(this.postDetails!.author);
      }
+
+     ngOnDestroy() {
+        console.log('ProfileComponent destroyed');
+        this.postDetailStatusSub?.unsubscribe();
+        this.postsService.setFilteredPosts() // Método para resetear cualquier búsqueda que hubiese
+    }
 
 }

@@ -8,7 +8,6 @@ button[mat-fab]{
 :host{
     margin: auto;
     display: block;
-
 }
 
 .button-edit{
@@ -48,11 +47,7 @@ button mat-icon{
     justify-content: center;
 }
 
-h3{
-    font-size: 1.5em;
-    font-family:'Lucida Sans';
-    margin-top: 10px;
-}
+
 
 img{
     width: 100%;
@@ -67,10 +62,9 @@ mat-card{
     padding: 20px 5%;
 }
 section{
-    padding: 20px 15% 20px;
-    max-width: 70%;
+    padding: 15px 10% 15px;
     min-height: 500px;
-    
+    margin-bottom: 10px!important;  
 }
 mat-divider{
     margin: 20px 0px;
@@ -81,6 +75,19 @@ mat-card-footer{
 
 p, li{
     margin-top:10px;
+}
+
+#posts-body app-post-list{
+    float: left;
+    margin-top: 10px!important;
+    margin-left: 10%;
+  
+}
+
+#personal-data{
+    margin:auto;
+    display: block;
+    max-width: 80vw;
 }
 
 #title h1{

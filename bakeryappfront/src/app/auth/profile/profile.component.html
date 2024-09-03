@@ -1,33 +1,19 @@
 
 
-<section>
+<div id="personal-data">
     <mat-card>
         <mat-card-header>
-            <h2 id="title">Nombre: {{ user!.name }}</h2>
-            <br><p>Id: {{ user!._id }}</p>
+            <h2 id="title">¡Hola, {{ user!.name }} !</h2>
+
         </mat-card-header>
 
         <mat-card-content>
-            <p style="color:white"><p>{{ user!._id }}</p>
-            <p>Email: {{ user!.email }}</p>
+            Bienvenido a tu panel de usuario, aquí es donde puedes consultar tanto tus recetas creadas, 
+            como las recetas que hayas archivado de otros usuarios.
         </mat-card-content>
     </mat-card>
 
 
-
-    <h2> Posts creados </h2>
-    <ul>
-        @for (post of authoredPosts; track post){
-            <li>{{ post.title }}</li>
-        }
-    </ul>
-    
-    <h2> Posts guardados </h2>
-    <ul>
-        @for (post of bookmarks; track post){
-            <li>{{ post.title }}</li>
-        }
-    </ul>
     <button mat-raised-button color="accent" (click)="onSelectingAuthored()">
         Mis recetas
     </button>
@@ -35,11 +21,20 @@
     <button mat-raised-button color="accent" (click)="onSelectingBookmarks()">
         Recetas archivadas
     </button>
-</section>
+
+    @if (searchFilter === 'authored'){
+        <h2> Mis recetas creadas</h2>
+    } @else if (searchFilter === 'bookmarked'){
+        <h2> Recetas archivadas</h2>
+    }
+    <app-search (filteredPosts)="searchBarFilter($event)" [searchAll]="false" />
+    
+</div>
+
+<div id="posts-body">
+    <app-post-list [posts]="posts" />
+    <app-post-details [postDetails]="postDetails"/>
+</div>
 
 
 
-
-<app-post-list [posts]="posts"/>
-
-<app-post-details />
