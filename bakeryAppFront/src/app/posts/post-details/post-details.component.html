@@ -12,7 +12,7 @@
                 
                 <mat-card-title id="title">
                     @if (isLogedIn && user!.bookmark.includes(postDetails._id)){
-                        <button mat-fab (click)="addToFavorites()" class="button-like">
+                        <button mat-fab (click)="addToFavorites(true)" class="button-like">
                             <mat-icon>disabled_by_default</mat-icon>
                         </button>
                     } @else {

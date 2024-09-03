@@ -113,7 +113,15 @@ export class AuthService {
     }
 
     addToBookmark(postId: string) {
-        
+        let user = this.userStatusListener.value;
+        if (user.bookmark.includes(postId)) {
+            let bookmarkCopy = user.bookmark.filter(id => id !== postId);
+            user.bookmark = bookmarkCopy;
+        } else {
+            user.bookmark.push(postId);
+            this.setUserStatus(user);
+        }
+
         const body = { postId, userId: this.userStatusListener.value._id };
         console.log("Adding bookmark", this.apiUrl);
         return this.csrfService.getHeaders().pipe(

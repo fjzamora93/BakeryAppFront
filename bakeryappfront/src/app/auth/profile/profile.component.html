@@ -39,7 +39,7 @@
 
 <div id="posts-body">
     <app-post-list [posts]="posts" currentUrl="profile/"/>
-    <app-post-details [postDetails]="postDetails"/>
+    <app-post-details [postDetails]="postDetails" (onChangeFavourites)="onChangeBookmark($event)"/>
 </div>
 
 

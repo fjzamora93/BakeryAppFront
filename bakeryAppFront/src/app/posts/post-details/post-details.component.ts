@@ -23,6 +23,7 @@ export class PostDetailsComponent implements OnInit  {
     @Input() postDetails?: Post | null;
     @Input() isEditing: boolean = false;
     @Output() isEditingChange = new EventEmitter<boolean>();
+    @Output() onChangeFavourites = new EventEmitter<boolean>();
 
     private postDetailStatusSub?: Subscription;
     private authStatusSub?: Subscription;
@@ -82,7 +83,8 @@ export class PostDetailsComponent implements OnInit  {
     }
 
 
-    addToFavorites(){
+    addToFavorites(removing: boolean = false) {
+        let message = '¡Añadido a favoritos!';
         this.authService
             .addToBookmark(this.postDetails!._id)
             .pipe(
@@ -94,13 +96,18 @@ export class PostDetailsComponent implements OnInit  {
                     return of(null);
                 })
             ).subscribe();
-        this.showMessage();
+
+        if (removing) {
+            message= 'Lamentamos que ya no te guste :(';
+        }
+        this.showMessage(message);
+        this.onChangeFavourites.emit(removing);
     }
 
 
 
-    showMessage() {
-        this.snackBar.open('¡Añadido a favoritos!', 'Ok', {
+    showMessage(message: string = '¡Añadido a favoritos!') {
+        this.snackBar.open(message, 'Ok', {
           duration: 3000, 
           verticalPosition: 'top', // 'top' o 'bottom'
           horizontalPosition: 'center', // 'start', 'center', 'end', 'left', 'right',

@@ -129,4 +129,10 @@ export class ProfileComponent implements OnInit  {
         this.postsService.setFilteredPosts() // Método para resetear cualquier búsqueda que hubiese
     }
 
+    onChangeBookmark(removing: boolean = false){
+        console.log("ACTUALIZANDO LA SITUACIÓN", removing);
+        this.postsService.setFilteredPosts(this.searchFilter);
+        this.postsService.getPosts();
+
+    }
 }
