@@ -132,7 +132,6 @@ export class ProfileComponent implements OnInit  {
     onChangeBookmark(removing: boolean = false){
         console.log("ACTUALIZANDO LA SITUACIÓN", removing);
         this.postsService.setFilteredPosts(this.searchFilter);
-        this.postsService.getPosts();
 
     }
 }
