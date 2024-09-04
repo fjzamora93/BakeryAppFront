@@ -3,13 +3,13 @@
 header {
     display: block;
     margin-bottom: 20px;
-    background: #8B5FBF; /* Degradado de color de fondo */
+    background: #000000 ; /* Degradado de color de fondo */
     color: white;
     padding: 20px 0; /* Más espacio arriba y abajo */
     text-align: center;
     font-family: 'Arial', sans-serif; /* Fuente principal */
-    border-bottom: 5px solid #3a146b; /* Borde decorativo inferior */
-    box-shadow: 0 4px 8px rgba(128, 0, 255, 0.2); /* Sombra sutil */
+    border-bottom: 5px solid #6b1414; /* Borde decorativo inferior */
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.2); /* Sombra sutil */
 }
 
 header h1 {
@@ -33,7 +33,7 @@ header::before {
 }
 
 header img{
-    width: 100px;
+    width: 200px;
     height: auto;
 }
 
@@ -43,10 +43,7 @@ img:hover{
     cursor: pointer;
 }
 
-.logo{
-    width: 300px!important;
-    height: auto;
-}
+
 
 .title{
     color: white;

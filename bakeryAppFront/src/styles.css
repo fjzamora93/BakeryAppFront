@@ -42,7 +42,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 button[mat-fab] {
-    background-color: #8B5FBF; /* Color malva-violeta */
+    background-color: #6b1414; /* Color malva-violeta */
     width: 56px; /* Tamaño del botón cuadrado */
     height: 56px; /* Asegura que el botón sea cuadrado */
     border-radius: 8px; /* Border radius ligero */
@@ -54,7 +54,7 @@ button[mat-fab] {
 }
 
 button[mat-fab]:hover {
-    background-color: #513779; /* Color malva-violeta más oscuro */
+    background-color: #000000; /* Color malva-violeta más oscuro */
 }
 
 button[mat-fab] mat-icon {

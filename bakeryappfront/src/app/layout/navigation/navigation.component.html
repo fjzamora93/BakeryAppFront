@@ -25,18 +25,18 @@
                 <mat-icon>person</mat-icon>
             </button>
 
-            <button mat-fab  [routerLink]="'/logout'" style="background-color: brown;" class="menu-item" (click)="onLogOut()">
+            <button mat-fab  [routerLink]="'/logout'" id="button-auth-out" class="menu-item" (click)="onLogOut()">
                 <mat-icon>logout</mat-icon>
             </button>
         }
         
             
         @if (!isAuth){
-            <button mat-fab  [routerLink]="'/login'" class="menu-item" style="background-color: rgb(26, 116, 68);">
+            <button mat-fab  [routerLink]="'/login'" class="menu-item" id="button-auth">
                 <mat-icon>login</mat-icon>
             </button>
 
-            <button mat-fab  [routerLink]="'/signup'" class="menu-item" style="background-color: rgb(26, 116, 68);">
+            <button mat-fab  [routerLink]="'/signup'" class="menu-item" id="button-auth">
                 <mat-icon>person_add</mat-icon>
             </button>
 

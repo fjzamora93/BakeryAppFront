@@ -1,0 +1,28 @@
+:host {
+    overflow: auto;
+}
+
+p, h1, h2, h3{
+    text-align: left;
+    
+}
+
+section{
+    padding: 5% 10%;
+}
+
+#standar-button{
+    width: 100px;
+    height: 75px;
+    padding-top: 20px;
+}
+#standar-button i{
+    font-size: 50px;
+}
+
+@media (max-width: 700px) {
+    section{
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+}

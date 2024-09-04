@@ -20,11 +20,26 @@ a p{
 }
 
 
+#button-auth{
+    background-color: rgb(26, 116, 68)
+}
+
+#button-auth:hover{
+    background-color: rgb(40, 163, 97)
+}
+
+#button-auth-out{
+    background-color: rgb(187, 22, 22);
+}
+
+#button-auth-out:hover{
+    background-color: rgb(255, 45, 45);
+}
 
 .menu-button-movil{
     width: 3em;
     height: 3em;
-    background-color: #7d55bd;
+    background-color: #6b1414;
     border-radius: 50%;
     opacity: 1;
     margin: auto;
@@ -43,7 +58,7 @@ a p{
 .menu-button-movil:hover{
     width: 3.5em;
     height: 3.5em;
-    background-color: #7d55bd;
+    background-color: #000000;
     opacity: 1;
 }
 

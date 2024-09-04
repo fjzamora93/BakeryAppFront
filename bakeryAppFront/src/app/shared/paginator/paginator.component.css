@@ -6,7 +6,7 @@
 }
 
 .custom-paginator button {
-    background-color: #6A0DAD; /* Fondo de color morado */
+    background-color: #6b1414; /* Fondo de color morado */
     color: white; /* Color del icono en blanco */
     border: none;
     border-radius: 5px; /* Bordes ligeramente redondeados */
@@ -21,6 +21,6 @@
 }
 
 .custom-paginator button:hover {
-    background-color: #8A2BE2; /* Un tono morado más claro al pasar el mouse */
+    background-color: #000000; /* Un tono morado más claro al pasar el mouse */
 }
 

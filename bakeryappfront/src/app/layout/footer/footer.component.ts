@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+
+import { PrivacyPoliticComponent } from '../privacy-politic/privacy-politic.component';
 
 @Component({
   selector: 'app-footer',
@@ -8,11 +11,21 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './footer.component.css'
 })
 export class FooterComponent {
-    @Output() openingPolicy = new EventEmitter<boolean>();
+    
+
+    constructor(
+        public dialog: MatDialog
+    ) {}
 
     onOpeningPolicy() {
-
-        this.openingPolicy.emit(true);
+        this.dialog.open(PrivacyPoliticComponent, {
+            width: '600px', 
+            height: '90vh',
+            backdropClass: 'custom-backdrop', 
+            data: {
+                
+            }
+        });
     }
 
 }
